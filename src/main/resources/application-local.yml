@@ -1,0 +1,33 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://remindmap.cuffxaa2dnw0.ap-northeast-2.rds.amazonaws.com:3306/remindMap?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=utf8
+    username: admin
+    password: Qwer1234!
+  jpa:
+    hibernate:
+      ddl-auto: none
+      use-new-id-generator-mappings: false
+      show-sql: true
+      format_sql: true
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true
+    generate-ddl: false
+    database: mysql
+
+
+logging:
+  level.org:
+    hibernate.type:
+      descriptor:
+        sql.BasicBinder: TRACE
+
+jwt:
+  secret: 4oCYbGVhLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtbmZ0LXNwcmluZy1ib290LWp3dC10dXRvcmlhbOK
+
+kakao:
+  client_id: 404f2930b7ffa68527a1d7d13107f4c1
