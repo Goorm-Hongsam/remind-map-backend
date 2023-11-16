@@ -8,6 +8,8 @@ import com.backend.remindmap.marker.domain.MarkerRepository;
 import com.backend.remindmap.marker.dto.request.MarkerCreateRequest;
 import com.backend.remindmap.marker.dto.request.MarkerLocationRequest;
 import com.backend.remindmap.marker.dto.response.MarkerResponse;
+import com.backend.remindmap.member.domain.Member;
+import com.backend.remindmap.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.io.ParseException;
@@ -26,14 +28,18 @@ import java.util.stream.Collectors;
 public class MarkerService {
 
     private final MarkerRepository markerRepository;
+    private final MemberRepository memberRepository;
     private final EntityManager em;
 
     private static final Double SEARCH_MAX_DISTANCE = 10.0;
 
     @Transactional
-    public MarkerResponse save(final MarkerCreateRequest request) throws ParseException {
+    public MarkerResponse save(final Long id, final MarkerCreateRequest request) throws ParseException {
+        Member member = memberRepository.findMemberById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));;
+
         Point point = convertRequestToPoint(request);
-        Marker marker = request.toEntity(point);
+        Marker marker = request.toEntity(member, point);
 
         Marker savedMarker = markerRepository.save(marker);
         return MarkerResponse.fromEntity(savedMarker);

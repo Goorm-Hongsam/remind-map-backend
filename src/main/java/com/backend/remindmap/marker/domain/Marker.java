@@ -1,10 +1,8 @@
 package com.backend.remindmap.marker.domain;
 
 import com.backend.remindmap.marker.dto.response.MarkerResponse;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.backend.remindmap.member.domain.Member;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.locationtech.jts.geom.Point;
 
@@ -15,11 +13,16 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "markers")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Marker {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     private String title;
 
@@ -42,7 +45,8 @@ public class Marker {
     private LocalDateTime wentDate;
 
     @Builder
-    public Marker(Long id, String title, String memo, Location location, Point point, LocalDateTime wentDate) {
+    public Marker(Member member, Long id, String title, String memo, Location location, Point point, LocalDateTime wentDate) {
+        this.member = member;
         this.id = id;
         this.title = title;
         this.memo = memo;

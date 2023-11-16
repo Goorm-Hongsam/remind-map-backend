@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ public class MemberController {
 
     // 카카오 로그인
     @PostMapping("/kakao/kakaoLogin/{code}")
+    @Transactional
     public ResponseEntity<Member> kakaoLogin(@PathVariable("code") String code) {
 
         log.info("인가코드={}",code);
@@ -35,6 +37,8 @@ public class MemberController {
 
         // jwt 토큰 생성
         String jwtToken = memberService.getJwtToken(member);
+
+        log.info(jwtToken);
 
         // 헤더에 jwt 토큰 담기
         HttpHeaders headers = new HttpHeaders();

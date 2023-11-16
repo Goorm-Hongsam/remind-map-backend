@@ -78,6 +78,7 @@ public class MemberService {
         return kakaoTokenDto;
     }
 
+    @Transactional
     public Member getMemberInfo(String kakaoAccessToken) {
 
         RestTemplate rt = new RestTemplate();
@@ -106,17 +107,8 @@ public class MemberService {
             e.printStackTrace();
         }
 
-        Member member = new Member(kakaoUerInfoDto.getId()
-                ,kakaoUerInfoDto.getKakao_account().getProfile().getNickname()
-                ,kakaoUerInfoDto.getKakao_account().getProfile().getThumbnail_image_url());
-
-
-        Optional<Member> existOwner = memberRepository.findMemberById(member.getMemberId());
-
-        if (existOwner.isEmpty()) {
-            // 회원가입
-            memberRepository.save(member);
-        }
+        Member member = new Member(kakaoUerInfoDto.getId(), kakaoUerInfoDto.getKakao_account().getProfile().getNickname(), kakaoUerInfoDto.getKakao_account().getProfile().getThumbnail_image_url());
+        memberRepository.save(member);
 
         return member;
 
@@ -127,8 +119,8 @@ public class MemberService {
         log.info("생성 시크릿 키={}",jwtSecretKey);
 
         String jwtToken = JWT.create()
-                .withExpiresAt(new Date(System.currentTimeMillis() + 120000))
-                .withClaim("id", member.getMemberId())
+                .withExpiresAt(new Date(System.currentTimeMillis() + 1200000000))
+                .withClaim("id", member.getId())
                 .withClaim("nickname", member.getNickname())
                 .withClaim("thumbnailImageUrl", member.getThumbnailImageUrl())
                 .sign(Algorithm.HMAC512(jwtSecretKey));

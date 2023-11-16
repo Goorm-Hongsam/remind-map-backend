@@ -33,7 +33,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         log.info("jwt 필터");
 
-        log.info("시크릿키={}",jwtSecretKey);
+        log.info("시크릿키={}", jwtSecretKey);
 
         String jwtHeader = ((HttpServletRequest) request).getHeader("Authorization");
 
@@ -47,17 +47,17 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String token = jwtHeader.replace("Bearer ", "");
 
         Long memberId = null;
-        String nicname = null;
+        String nickname = null;
         String thumbnailImageUrl = null;
 
         try {
             log.info("try");
             memberId = JWT.require(Algorithm.HMAC512(jwtSecretKey)).build().verify(token)
                     .getClaim("id").asLong();
-            log.info("memberId={}",memberId);
-            nicname = JWT.require(Algorithm.HMAC512(jwtSecretKey)).build().verify(token)
+            log.info("memberId={}", memberId);
+            nickname = JWT.require(Algorithm.HMAC512(jwtSecretKey)).build().verify(token)
                     .getClaim("nickname").asString();
-            log.info(nicname);
+            log.info(nickname);
             thumbnailImageUrl = JWT.require(Algorithm.HMAC512(jwtSecretKey)).build().verify(token)
                     .getClaim("thumbnailImageUrl").asString();
             log.info(thumbnailImageUrl);
@@ -76,7 +76,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             return;
         }
 
-        request.setAttribute("member", new Member(memberId,nicname,thumbnailImageUrl));
+        request.setAttribute("member", new Member(memberId, nickname, thumbnailImageUrl));
 
         filterChain.doFilter(request, response);
     }

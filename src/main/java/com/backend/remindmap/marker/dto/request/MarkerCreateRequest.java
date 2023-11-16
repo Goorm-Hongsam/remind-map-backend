@@ -2,6 +2,7 @@ package com.backend.remindmap.marker.dto.request;
 
 import com.backend.remindmap.marker.domain.Location;
 import com.backend.remindmap.marker.domain.Marker;
+import com.backend.remindmap.member.domain.Member;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,8 +29,9 @@ public class MarkerCreateRequest {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime wentDate;
 
-    public Marker toEntity(Point point) {
+    public Marker toEntity(Member member, Point point) {
         return Marker.builder()
+                .member(member)
                 .title(title)
                 .memo(memo)
                 .location(location)
