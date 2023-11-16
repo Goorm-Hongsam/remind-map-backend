@@ -2,6 +2,7 @@ package com.backend.remindmap.marker.dto.response;
 
 import com.backend.remindmap.marker.domain.Location;
 import com.backend.remindmap.marker.domain.Marker;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MarkerResponse {
 
     private Long id;

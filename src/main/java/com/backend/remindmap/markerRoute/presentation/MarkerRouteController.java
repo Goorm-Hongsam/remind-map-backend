@@ -25,7 +25,6 @@ public class MarkerRouteController {
             HttpServletRequest servletRequest
     ) {
         Member member = (Member) servletRequest.getAttribute("member");
-        System.out.println(member);
         IntegrativeMarkerRouteCreateResponse response = markerRouteService.save(member.getId(), request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
