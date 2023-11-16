@@ -14,14 +14,16 @@ import java.time.LocalDateTime;
 public class MarkerResponse {
 
     private Long id;
+    private String nickName;
     private String title;
     private String memo;
     private Location location;
     private LocalDateTime wentDate;
 
     @Builder
-    public MarkerResponse(Long id, String title, String memo, Location location, LocalDateTime wentDate) {
+    public MarkerResponse(Long id, String nickName, String title, String memo, Location location, LocalDateTime wentDate) {
         this.id = id;
+        this.nickName = nickName;
         this.title = title;
         this.memo = memo;
         this.location = location;
@@ -31,6 +33,7 @@ public class MarkerResponse {
     public static MarkerResponse fromEntity(Marker marker) {
         return MarkerResponse.builder()
                 .id(marker.getId())
+                .nickName(marker.getMember().getNickname())
                 .title(marker.getTitle())
                 .memo(marker.getMemo())
                 .wentDate(marker.getWentDate())
