@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
-@RequestMapping("/v1/api")
 @RestController
 @RequiredArgsConstructor
 public class MarkerController {

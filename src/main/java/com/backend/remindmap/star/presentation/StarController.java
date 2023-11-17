@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RequestMapping("/v1/api")
 @RestController
 @RequiredArgsConstructor
 public class StarController {
