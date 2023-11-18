@@ -1,12 +1,8 @@
 package com.backend.remindmap.member.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 
 @Entity
@@ -17,8 +13,15 @@ public class Member {
 
     @Id
     @Column(name = "member_id")
-    private Long memberId;
+    private Long id;
 
     private String nickname;
     private String thumbnailImageUrl;
+
+    @Builder
+    public Member(String nickname, String thumbnailImageUrl) {
+        this.nickname = nickname;
+        this.thumbnailImageUrl = thumbnailImageUrl;
+    }
+
 }
