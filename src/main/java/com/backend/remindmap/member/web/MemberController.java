@@ -1,6 +1,7 @@
 package com.backend.remindmap.member.web;
 
 
+import com.backend.remindmap.member.domain.KakaoFriendsDto;
 import com.backend.remindmap.member.domain.KakaoTokenDto;
 import com.backend.remindmap.member.domain.Member;
 import com.backend.remindmap.member.service.MemberService;
@@ -21,7 +22,7 @@ public class MemberController {
 
     // 카카오 로그인
     @PostMapping("/kakao/kakaoLogin/{code}")
-    public ResponseEntity<Member> kakaoLogin(@PathVariable("code") String code) {
+    public ResponseEntity<KakaoFriendsDto> kakaoLogin(@PathVariable("code") String code) {
 
         log.info("인가코드={}",code);
 
@@ -36,12 +37,25 @@ public class MemberController {
         // jwt 토큰 생성
         String jwtToken = memberService.getJwtToken(member);
 
+        log.info(jwtToken);
+
+        // 친구목록 테스트
+        KakaoFriendsDto kakaoFriendsDto = memberService.getFriends(kakaoAccessToken.getAccess_token());
+
+        // 친구에게 메세지 보내기 테스트
+        memberService.sendMessage(kakaoAccessToken.getAccess_token());
+
+        // 나에게 메세지 보내기 테스트
+//        memberService.sendMessageToMe(kakaoAccessToken.getAccess_token());
+
         // 헤더에 jwt 토큰 담기
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + jwtToken);
 
-        return ResponseEntity.ok().headers(headers).body(member);
+        return ResponseEntity.ok().headers(headers).body(kakaoFriendsDto);
     }
+
+    // 친구목록
 
     // jwt 필터 거친 후 정보 조회 예시
     @PostMapping("/test")
