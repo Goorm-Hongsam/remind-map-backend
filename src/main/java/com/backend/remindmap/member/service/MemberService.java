@@ -1,7 +1,5 @@
 package com.backend.remindmap.member.service;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.backend.remindmap.member.domain.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -24,6 +22,7 @@ import java.util.*;
 @RequiredArgsConstructor
 @Service
 @Slf4j
+@Transactional
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -114,21 +113,6 @@ public class MemberService {
         return member;
 
     }
-
-    public String getJwtToken(Member member) {
-
-        log.info("생성 시크릿 키={}",jwtSecretKey);
-
-        String jwtToken = JWT.create()
-                .withExpiresAt(new Date(System.currentTimeMillis() + 120000))
-                .withClaim("id", member.getMemberId())
-                .withClaim("nickname", member.getNickname())
-                .withClaim("thumbnailImageUrl", member.getThumbnailImageUrl())
-                .sign(Algorithm.HMAC512(jwtSecretKey));
-
-        return jwtToken;
-    }
-
 
     public KakaoFriendsDto getFriends(String token) {
 
@@ -227,6 +211,36 @@ public class MemberService {
                 String.class
         );
 
+
+    }
+
+    // 더티채킹
+    @Transactional
+    public void saveRefreshToken(Member member, String refreshToken) {
+
+        MemberRefreshToken memberRefreshToken = new MemberRefreshToken();
+        memberRefreshToken.setMemberId(member.getMemberId());
+        memberRefreshToken.setRefreshToken(refreshToken);
+
+        MemberRefreshToken dbRefreshToken = getDbRefreshToken(member.getMemberId());
+
+        if (dbRefreshToken != null) {
+            dbRefreshToken.setRefreshToken(refreshToken);
+        } else {
+            memberRepository.saveRefreshToken(memberRefreshToken);
+        }
+
+    }
+
+    public MemberRefreshToken getDbRefreshToken(Long memberId) {
+
+        Optional<MemberRefreshToken> memberRefreshToken = memberRepository.findRefreshTokenByMemberId(memberId);
+
+        if (memberRefreshToken.isPresent()) {
+            return memberRefreshToken.get();
+        } else {
+            return null;
+        }
 
     }
 }
