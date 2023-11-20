@@ -13,7 +13,7 @@ public class Member {
 
     @Id
     @Column(name = "member_id")
-    private Long id;
+    private Long memberId;
 
     private String nickname;
     private String thumbnailImageUrl;

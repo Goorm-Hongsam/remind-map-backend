@@ -1,12 +1,11 @@
 package com.backend.remindmap.Config;
 
 //import com.remind.map.Config.Filter.CustomAuthenticationEntryPoint;
-import com.backend.remindmap.Config.Filter.JwtRequestFilter;
+import com.backend.remindmap.Config.JWT.JwtRequestFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -17,8 +16,6 @@ import org.springframework.web.filter.CorsFilter;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig {
-
-    // permitAll : 로그인, 메인화면-검색,랭킹
 
     private final CorsFilter corsFilter;
     private final JwtRequestFilter jwtRequestFilter;
@@ -36,17 +33,12 @@ public class WebSecurityConfig {
 
         http.authorizeRequests()
                 .anyRequest().permitAll();
-//                .and()
-//                .exceptionHandling()
-//                .authenticationEntryPoint(new CustomAuthenticationEntryPoint());
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-//    public void configure(WebSecurity web) throws Exception {
-//        web.ignoring().antMatchers("/kakao/**");
-//    }
+
 
 }
