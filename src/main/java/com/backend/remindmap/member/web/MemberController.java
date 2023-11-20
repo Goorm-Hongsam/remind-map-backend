@@ -61,23 +61,24 @@ public class MemberController {
         log.info("자체 refresh token={}",refreshToken);
 
         // localhost 테스트용 쿠키
-        ResponseCookie cookie = ResponseCookie.from("refresh-token",refreshToken)
-                .maxAge(14 * 24 * 60 * 60)
-                .path("/")
-                .httpOnly(true)
-                .build();
+//        ResponseCookie cookie = ResponseCookie.from("refresh-token",refreshToken)
+//                .maxAge(14 * 24 * 60 * 60)
+//                .path("/")
+//                .httpOnly(true)
+//                .build();
 
         /**
          * 배포용 쿠키
          */
-//        ResponseCookie cookie = ResponseCookie.from("refresh-token",refreshToken)
-//                .maxAge(14 * 24 * 60 * 60)
-//                .path("/")
-//                .sameSite("none") // 배포에서는 None
-//                .secure(true)
-//                .httpOnly(true)
-//                .build();
-        // 만약 에러나면 domain 등록
+        ResponseCookie cookie = ResponseCookie.from("refresh-token",refreshToken)
+                .maxAge(14 * 24 * 60 * 60)
+//                .maxAge(4 * 60) // 테스트용 4분
+                .path("/")
+                .sameSite("none") // 배포에서는 None
+                .secure(true)
+                .httpOnly(true)
+                .build();
+//         만약 에러나면 domain 등록
 
         // 친구목록 테스트
 //        KakaoFriendsDto kakaoFriendsDto = memberService.getFriends(kakaoAccessToken.getAccess_token());
@@ -102,8 +103,7 @@ public class MemberController {
      * 클라이언트에서 받은 refresh token 유효성 검사
      * localhost 테스트에서 GET -> 배포 후 POST로 바꾸기
      */
-//    @GetMapping("/login-check/refresh-token")
-    @GetMapping("/test")
+    @PostMapping("/login-check/refresh-token")
     public void changeToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         String refreshToken = Arrays.stream(request.getCookies())
@@ -115,7 +115,7 @@ public class MemberController {
 
         // 유효성 검사
         if (!jwtTokenProvider.validateToken(refreshToken)) {
-            response.sendError(HttpStatus.UNAUTHORIZED.value(), "로그아웃 해주세요1.");
+            response.sendError(HttpStatus.UNAUTHORIZED.value(), "로그아웃 해주세요.");
             return;
         }
 
@@ -127,7 +127,7 @@ public class MemberController {
 
         // db 비교 (해야할까?)
         if ( !refreshToken.equals(dbRefreshToken)) {
-            response.sendError(HttpStatus.UNAUTHORIZED.value(), "로그아웃 해주세요2.");
+            response.sendError(HttpStatus.UNAUTHORIZED.value(), "로그아웃 해주세요.");
             return;
         }
 
@@ -148,7 +148,10 @@ public class MemberController {
             // localhost 테스트용 쿠키
             ResponseCookie cookie = ResponseCookie.from("refresh-token",newRefreshToken)
                     .maxAge(14 * 24 * 60 * 60)
+//                    .maxAge(4 * 60)
                     .path("/")
+                    .sameSite("none")
+                    .secure(true)
                     .httpOnly(true)
                     .build();
 

@@ -34,6 +34,7 @@ public class JwtTokenProvider {
                 .claim("thumbnailImageUrl", member.getThumbnailImageUrl())
                 .setIssuedAt(now)
                 .setExpiration(new Date(System.currentTimeMillis() + (1000 * 60 * 30)))
+//                .setExpiration(new Date(System.currentTimeMillis() + (1000 * 60 * 2))) // 테스트용 2분
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
@@ -50,6 +51,7 @@ public class JwtTokenProvider {
                 .claim("id",member.getMemberId())
                 .setIssuedAt(now)
                 .setExpiration(new Date(System.currentTimeMillis() + (1000*60*60*24*14)))
+//                .setExpiration(new Date(System.currentTimeMillis() + (1000 * 60 * 4))) // 테스트용 4분
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
