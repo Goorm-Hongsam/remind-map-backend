@@ -1,6 +1,7 @@
 package com.backend.remindmap.marker.dto.request;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
@@ -9,6 +10,7 @@ import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Getter
+@AllArgsConstructor
 public class MarkerUpdateRequest {
 
     @NotBlank(message = "제목은 비어있을 수 없습니다.")
