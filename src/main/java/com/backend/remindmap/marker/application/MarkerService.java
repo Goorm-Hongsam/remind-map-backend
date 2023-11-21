@@ -56,6 +56,8 @@ public class MarkerService {
 
     public MarkerResponse findMarker(final Long markerId) {
         Marker marker = markerRepository.getById(markerId);
+        marker.change();
+        markerRepository.save(marker);
 
         return marker.toResponse();
     }

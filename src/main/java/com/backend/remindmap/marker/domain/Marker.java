@@ -44,6 +44,10 @@ public class Marker {
     @Column(name = "went_date", nullable = false)
     private LocalDateTime wentDate;
 
+    public void change() {
+        this.view += 1;
+    }
+
     @Builder
     public Marker(Member member, Long id, String title, String memo, Location location, Point point, LocalDateTime wentDate) {
         this.member = member;
