@@ -7,6 +7,7 @@ import com.backend.remindmap.marker.domain.Marker;
 import com.backend.remindmap.marker.domain.MarkerRepository;
 import com.backend.remindmap.marker.dto.request.MarkerCreateRequest;
 import com.backend.remindmap.marker.dto.request.MarkerLocationRequest;
+import com.backend.remindmap.marker.dto.request.MarkerUpdateRequest;
 import com.backend.remindmap.marker.dto.response.MarkerResponse;
 import com.backend.remindmap.member.domain.Member;
 import com.backend.remindmap.member.repository.MemberRepository;
@@ -57,6 +58,17 @@ public class MarkerService {
     public MarkerResponse findMarker(final Long markerId) {
         Marker marker = markerRepository.getById(markerId);
         marker.change();
+        markerRepository.save(marker);
+
+        return marker.toResponse();
+    }
+
+    public MarkerResponse updateMarker(final Long markerId, Long memberId, MarkerUpdateRequest request) {
+        Marker marker = markerRepository.getById(markerId);
+        if ( marker.getMember().getId() != memberId ) {
+            throw new IllegalArgumentException("마커 생성자가 아닙니다.");
+        }
+        marker.update(request);
         markerRepository.save(marker);
 
         return marker.toResponse();

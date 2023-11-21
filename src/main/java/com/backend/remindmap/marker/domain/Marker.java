@@ -1,5 +1,6 @@
 package com.backend.remindmap.marker.domain;
 
+import com.backend.remindmap.marker.dto.request.MarkerUpdateRequest;
 import com.backend.remindmap.marker.dto.response.MarkerResponse;
 import com.backend.remindmap.member.domain.Member;
 import lombok.*;
@@ -69,5 +70,12 @@ public class Marker {
                 .visiable(this.visiable)
                 .wentDate(this.wentDate)
                 .build();
+    }
+
+    public void update(MarkerUpdateRequest updateRequest) {
+        this.title = updateRequest.getTitle();
+        this.memo = updateRequest.getMemo();
+        this.visiable = updateRequest.isVisible();
+        this.wentDate = updateRequest.getWentDate();
     }
 }

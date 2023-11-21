@@ -3,6 +3,7 @@ package com.backend.remindmap.marker.presentation;
 import com.backend.remindmap.marker.application.MarkerService;
 import com.backend.remindmap.marker.dto.request.MarkerCreateRequest;
 import com.backend.remindmap.marker.dto.request.MarkerLocationRequest;
+import com.backend.remindmap.marker.dto.request.MarkerUpdateRequest;
 import com.backend.remindmap.marker.dto.response.MarkerResponse;
 import com.backend.remindmap.member.domain.Member;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +46,17 @@ public class MarkerController {
     @GetMapping("/marker/{markerId}")
     public ResponseEntity<MarkerResponse> findMarker(@PathVariable final Long markerId) {
         MarkerResponse response = markerService.findMarker(markerId);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PatchMapping("/marker/{markerId}")
+    public ResponseEntity<MarkerResponse> updateMarker(
+            @PathVariable final Long markerId,
+            @Valid @RequestBody final MarkerUpdateRequest request,
+            HttpServletRequest servletRequest
+    ) {
+        Member member = (Member) servletRequest.getAttribute("member");
+        MarkerResponse response = markerService.updateMarker(markerId, member.getId(), request);
         return ResponseEntity.ok().body(response);
     }
 }
