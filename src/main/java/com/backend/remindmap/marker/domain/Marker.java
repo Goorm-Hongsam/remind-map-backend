@@ -49,13 +49,14 @@ public class Marker {
     }
 
     @Builder
-    public Marker(Member member, Long id, String title, String memo, Location location, Point point, LocalDateTime wentDate) {
+    public Marker(Member member, Long id, String title, String memo, Location location, Point point, boolean visiable, LocalDateTime wentDate) {
         this.member = member;
         this.id = id;
         this.title = title;
         this.memo = memo;
         this.location = location;
         this.point = point;
+        this.visiable = visiable;
         this.wentDate = wentDate;
     }
 
@@ -65,6 +66,7 @@ public class Marker {
                 .title(this.title)
                 .memo(this.memo)
                 .location(this.location)
+                .visiable(this.visiable)
                 .wentDate(this.wentDate)
                 .build();
     }

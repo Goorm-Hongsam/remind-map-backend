@@ -21,10 +21,11 @@ public class MarkerResponse {
     private String memo;
     private Location location;
     private int view;
+    private boolean visiable;
     private LocalDateTime wentDate;
 
     @Builder
-    public MarkerResponse(Long id, String nickName, String title, String memo, Location location, int view, LocalDateTime wentDate) {
+    public MarkerResponse(Long id, String nickName, String title, String memo, Location location, int view, boolean visiable, LocalDateTime wentDate) {
         this.id = id;
         this.nickName = nickName;
         this.title = title;
@@ -42,6 +43,7 @@ public class MarkerResponse {
                 .memo(marker.getMemo())
                 .location(marker.getLocation())
                 .view(marker.getView())
+                .visiable(marker.isVisiable())
                 .wentDate(marker.getWentDate())
                 .build();
     }
