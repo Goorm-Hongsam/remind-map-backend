@@ -34,7 +34,7 @@ public class StarService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 마커입니다."));
 
         if (starRepository.existsByMemberAndMarker(member, marker)) {
-            throw new IllegalStateException("찜 목록 내 존재하지 않는 마커입니다.");
+            throw new IllegalStateException("찜 목록 내 이미 존재하는 마커입니다.");
         }
 
         Star star = Star.builder()
@@ -74,7 +74,7 @@ public class StarService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 루트입니다."));
 
         if (starRepository.existsByMemberAndRoute(member, route)) {
-            throw new IllegalStateException("찜 목록 내 존재하지 않는 루트입니다.");
+            throw new IllegalStateException("찜 목록 내 이미 존재하는 루트입니다.");
         }
 
         Star star = Star.builder()
