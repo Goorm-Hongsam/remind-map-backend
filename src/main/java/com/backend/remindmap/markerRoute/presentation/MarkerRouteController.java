@@ -34,7 +34,7 @@ public class MarkerRouteController {
 
     @GetMapping("/marker-route")
     public ResponseEntity<List<RouteResponse>> findAllByMarkerLocation(
-            @Valid @RequestBody final MarkerLocationRequest request,
+            @Valid @ModelAttribute final MarkerLocationRequest request,
             HttpServletRequest servletRequest
     ) {
         List<RouteResponse> response = markerRouteService.findAllByMarkerLocation(request);
