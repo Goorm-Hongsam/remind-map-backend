@@ -32,6 +32,7 @@ public class MarkerResponse {
         this.memo = memo;
         this.location = location;
         this.view = view;
+        this.visiable = visiable;
         this.wentDate = wentDate;
     }
 
