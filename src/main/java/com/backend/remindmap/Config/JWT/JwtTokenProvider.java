@@ -1,6 +1,6 @@
 package com.backend.remindmap.Config.JWT;
 
-import com.backend.remindmap.member.domain.Member;
+import com.backend.remindmap.member.domain.Member.Member;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -33,8 +33,8 @@ public class JwtTokenProvider {
                 .claim("nickname", member.getNickname())
                 .claim("thumbnailImageUrl", member.getThumbnailImageUrl())
                 .setIssuedAt(now)
-                .setExpiration(new Date(System.currentTimeMillis() + (1000 * 60 * 30)))
-//                .setExpiration(new Date(System.currentTimeMillis() + (1000 * 60 * 2))) // 테스트용 2분
+//                .setExpiration(new Date(System.currentTimeMillis() + (1000 * 60 * 30)))
+                .setExpiration(new Date(System.currentTimeMillis() + (1000 * 60 * 2))) // 테스트용 2분
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
@@ -50,15 +50,15 @@ public class JwtTokenProvider {
                 .setHeaderParam("type", "jwt")
                 .claim("id",member.getMemberId())
                 .setIssuedAt(now)
-                .setExpiration(new Date(System.currentTimeMillis() + (1000*60*60*24*14)))
-//                .setExpiration(new Date(System.currentTimeMillis() + (1000 * 60 * 4))) // 테스트용 4분
+//                .setExpiration(new Date(System.currentTimeMillis() + (1000*60*60*24*14)))
+                .setExpiration(new Date(System.currentTimeMillis() + (1000 * 60 * 4))) // 테스트용 4분
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
     // 모든 token에 대한 사용자 속성정보 조회
     public Member getMemberByAccessToken(String token) {
-        Claims claims =  parserBuilder()
+        Claims claims = parserBuilder()
                 .setSigningKey(jwtSecretKey)
                 .build()
                 .parseClaimsJws(token)
