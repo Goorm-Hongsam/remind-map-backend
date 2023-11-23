@@ -34,7 +34,7 @@ public class MemberController {
      * 카카오 로그인
      * 로컬 테스트일 때만 Get 요청으로 변경해둠
      */
-    @PostMapping("/kakao/kakaoLogin/{code}")
+    @PostMapping("/api/kakao/kakaoLogin/{code}")
     public ResponseEntity<Member> kakaoLogin(@PathVariable("code") String code, HttpServletResponse response) {
 
         log.info("인가코드={}",code);
@@ -74,8 +74,8 @@ public class MemberController {
          * 배포용 쿠키
          */
         ResponseCookie cookie = ResponseCookie.from("refresh-token",refreshToken)
-//                .maxAge(14 * 24 * 60 * 60)
-                .maxAge(4 * 60) // 테스트용 4분
+                .maxAge(14 * 24 * 60 * 60)
+//                .maxAge(4 * 60) // 테스트용 4분
                 .path("/")
                 .sameSite("none") // 배포에서는 None
                 .secure(true)
@@ -106,7 +106,7 @@ public class MemberController {
      * 클라이언트에서 받은 refresh token 유효성 검사
      * localhost 테스트에서 GET -> 배포 후 POST로 바꾸기
      */
-    @PostMapping("/login-check/refresh-token")
+    @PostMapping("/api/login-check/refresh-token")
     public void changeToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         String refreshToken = Arrays.stream(request.getCookies())
@@ -159,8 +159,8 @@ public class MemberController {
 
             // localhost 테스트용 쿠키
             ResponseCookie cookie = ResponseCookie.from("refresh-token",newRefreshToken)
-//                    .maxAge(14 * 24 * 60 * 60)
-                    .maxAge(4 * 60)
+                    .maxAge(14 * 24 * 60 * 60)
+//                    .maxAge(4 * 60)
                     .path("/")
                     .sameSite("none")
                     .secure(true)
@@ -178,7 +178,7 @@ public class MemberController {
     /**
      * 새로고침시 access token 유효성 검사
      */
-    @PostMapping("/login-check")
+    @PostMapping("/api/login-check")
     public Member loginCheck(HttpServletRequest request) {
         return (Member) request.getAttribute("member");
     }
@@ -190,8 +190,8 @@ public class MemberController {
 
 
     // jwt 필터 거친 후 정보 조회 예시
-    // localhost 테스트에서 GET으로
-//    @GetMapping("/test")
+    // localhost 테스트에서 GET으로 -> 헤더에 보내주는건 POST임
+//    @GetMapping("/api/test")
     public Member test(HttpServletRequest request) {
 
         String token = Arrays.stream(request.getCookies())

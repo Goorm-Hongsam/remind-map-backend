@@ -49,7 +49,7 @@ public class MemberService {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", client_id);
-        params.add("redirect_uri", "https://938e-1-217-43-45.ngrok-free.app/kakao/callback");
+        params.add("redirect_uri", "https://remindmap.site/kakao/callback");
         params.add("code", code);
 //        params.add("client_secret", KAKAO_CLIENT_SECRET); 선택 사항
 
