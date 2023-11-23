@@ -61,9 +61,9 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-processResources.dependsOn('copySecret')
-tasks.register('copySecret', Copy) {
-	from './src/main/resources/security'
-	include "application*.yml"
-	into 'src/main/resources'
-}
+//processResources.dependsOn('copySecret')
+//tasks.register('copySecret', Copy) {
+//	from './src/main/resources/security'
+//	include "application*.yml"
+//	into 'src/main/resources'
+//}

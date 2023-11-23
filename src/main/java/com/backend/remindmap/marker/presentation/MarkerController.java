@@ -1,8 +1,10 @@
 package com.backend.remindmap.marker.presentation;
 
+import com.backend.remindmap.marker.application.MarkerProducerService;
 import com.backend.remindmap.marker.application.MarkerService;
 import com.backend.remindmap.marker.dto.request.MarkerCreateRequest;
 import com.backend.remindmap.marker.dto.request.MarkerLocationRequest;
+import com.backend.remindmap.marker.dto.request.MarkerRankRequest;
 import com.backend.remindmap.marker.dto.response.MarkerResponse;
 import com.backend.remindmap.member.domain.Member;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import java.util.List;
 public class MarkerController {
 
     private final MarkerService markerService;
+    private final MarkerProducerService markerProducerService;
 
     @PostMapping("/marker")
     public ResponseEntity<MarkerResponse> save(
@@ -27,7 +30,7 @@ public class MarkerController {
             HttpServletRequest servletRequest
     ) throws ParseException {
         Member member = (Member) servletRequest.getAttribute("member");
-        MarkerResponse response = markerService.save(member.getId(), request);
+        MarkerResponse response = markerService.save(member.getMemberId(), request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -45,6 +48,7 @@ public class MarkerController {
     @GetMapping("/marker/{markerId}")
     public ResponseEntity<MarkerResponse> findMarker(@PathVariable final Long markerId) {
         MarkerResponse response = markerService.findMarker(markerId);
+        markerProducerService.send(MarkerRankRequest.from(markerId));
         return ResponseEntity.ok().body(response);
     }
 }

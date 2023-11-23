@@ -1,6 +1,5 @@
 package com.backend.remindmap.Config;
 
-
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -19,25 +18,24 @@ import java.util.Map;
 public class KafkaConfig {
 
     @Value(value = "${spring.kafka.bootstrap-servers}")
-    private String bootstrapAddress;
+    private String producerBootstrapAddress;
 
     @Bean
     public KafkaAdmin kafkaAdmin() {
         Map<String, Object> configs = new HashMap<>();
-        configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
+        configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, producerBootstrapAddress);
         return new KafkaAdmin(configs);
     }
 
-    // 토픽 이름 설정해주세요
     @Bean
-    public NewTopic myTopic1() {
-        return new NewTopic("my_topic_1", 1, (short) 1);
+    public NewTopic markerTopic() {
+        return new NewTopic("marker_topic", 1, (short) 1);
     }
 
     @Bean
     public ProducerFactory<String, String> producerFactory() {
         Map<String, Object> configProps = new HashMap<>();
-        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
+        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, producerBootstrapAddress);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
 
