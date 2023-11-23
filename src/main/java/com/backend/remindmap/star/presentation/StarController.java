@@ -28,7 +28,7 @@ public class StarController {
             @PathVariable final Long markerId,
             HttpServletRequest servletRequest) {
         Member member = (Member) servletRequest.getAttribute("member");
-        starService.addMarkerToStar(member.getId(), markerId);
+        starService.addMarkerToStar(member.getMemberId(), markerId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -36,7 +36,7 @@ public class StarController {
     public ResponseEntity<List<MarkerResponse>> getStar(
             HttpServletRequest servletRequest) {
         Member member = (Member) servletRequest.getAttribute("member");
-        List<Marker> wishlist = starService.getMemberStar(member.getId());
+        List<Marker> wishlist = starService.getMemberStar(member.getMemberId());
         List<MarkerResponse> responses = wishlist.stream()
                 .map(Marker::toResponse)
                 .collect(Collectors.toList());
@@ -49,7 +49,7 @@ public class StarController {
             HttpServletRequest servletRequest,
             @PathVariable Long markerId) {
         Member member = (Member) servletRequest.getAttribute("member");
-        starService.removeMarkerFromStar(member.getId(), markerId);
+        starService.removeMarkerFromStar(member.getMemberId(), markerId);
         return ResponseEntity.noContent().build();
     }
 
@@ -59,14 +59,14 @@ public class StarController {
             HttpServletRequest servletRequest,
             @PathVariable Long routeId) {
         Member member = (Member) servletRequest.getAttribute("member");
-        starService.addRouteToStar(member.getId(), routeId);
+        starService.addRouteToStar(member.getMemberId(), routeId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/star/routes")
     public ResponseEntity<List<RouteResponse>> getStarRoutes(ServletRequest servletRequest) {
         Member member = (Member) servletRequest.getAttribute("member");
-        List<Route> wishlistRoutes = starService.getMemberStarRoutes(member.getId());
+        List<Route> wishlistRoutes = starService.getMemberStarRoutes(member.getMemberId());
         List<RouteResponse> responses = wishlistRoutes.stream()
                 .map(v-> RouteResponse.fromEntityWithoutMarkers(v))
                 .collect(Collectors.toList());
@@ -79,7 +79,7 @@ public class StarController {
             HttpServletRequest servletRequest,
             @PathVariable Long routeId) {
         Member member = (Member) servletRequest.getAttribute("member");
-        starService.removeRouteFromStar(member.getId(), routeId);
+        starService.removeRouteFromStar(member.getMemberId(), routeId);
         return ResponseEntity.noContent().build();
     }
 
