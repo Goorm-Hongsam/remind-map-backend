@@ -1,5 +1,6 @@
 package com.backend.remindmap.marker.dto.request;
 
+import com.backend.remindmap.group.domain.Group;
 import com.backend.remindmap.marker.domain.Location;
 import com.backend.remindmap.marker.domain.Marker;
 import com.backend.remindmap.member.domain.Member;
@@ -34,6 +35,19 @@ public class MarkerCreateRequest {
     public Marker toEntity(Member member, Point point) {
         return Marker.builder()
                 .member(member)
+                .title(title)
+                .memo(memo)
+                .visiable(visiable)
+                .location(location)
+                .wentDate(wentDate)
+                .point(point)
+                .build();
+    }
+
+    public Marker toEntityByGroup(Member member, Group group, Point point) {
+        return Marker.markerWithGroupBuilder()
+                .member(member)
+                .group(group)
                 .title(title)
                 .memo(memo)
                 .visiable(visiable)

@@ -1,8 +1,8 @@
-package com.remind.map.group.controller;
+package com.backend.remindmap.group.controller;
 
+import com.backend.remindmap.group.service.GroupMemberService;
 import com.remind.map.group.domain.GroupMember;
 import com.remind.map.group.domain.GroupMemberDto;
-import com.remind.map.group.service.GroupMemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -1,6 +1,6 @@
-package com.remind.map.group.repository;
+package com.backend.remindmap.group.repository;
 
-import com.remind.map.group.domain.Group;
+import com.backend.remindmap.group.domain.Group;
 import com.remind.map.group.domain.GroupDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

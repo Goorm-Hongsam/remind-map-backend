@@ -1,6 +1,8 @@
 package com.backend.remindmap.marker.application;
 
 import com.backend.remindmap.global.utils.GeometryUtil;
+import com.backend.remindmap.group.domain.Group;
+import com.backend.remindmap.group.repository.GroupRepository;
 import com.backend.remindmap.marker.domain.Direction;
 import com.backend.remindmap.marker.domain.Location;
 import com.backend.remindmap.marker.domain.Marker;
@@ -30,6 +32,7 @@ public class MarkerService {
 
     private final MarkerRepository markerRepository;
     private final MemberRepository memberRepository;
+    private final GroupRepository groupRepository;
     private final EntityManager em;
 
     private static final Double SEARCH_MAX_DISTANCE = 10.0;
@@ -118,4 +121,29 @@ public class MarkerService {
     }
 
 
+    public MarkerResponse saveByGroup(Long memberId, Long groupId, MarkerCreateRequest request) throws ParseException {
+        Member member = memberRepository.findMemberById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+
+        Group group = groupRepository.findGroupById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 그룹입니다."));
+
+        Point point = convertRequestToPoint(request);
+        Marker marker = request.toEntityByGroup(member, group, point);
+
+        Marker savedMarker = markerRepository.save(marker);
+        return MarkerResponse.fromEntity(savedMarker);
+
+    }
+
+    public List<MarkerResponse> findMarkersByGroup(Long groupId) {
+        Group group = groupRepository.findGroupById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 그룹입니다."));
+
+        List<Marker> markersInGroup = markerRepository.findByGroup(group);
+
+        return markersInGroup.stream()
+                .map(MarkerResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
 }

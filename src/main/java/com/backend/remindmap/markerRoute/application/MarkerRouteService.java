@@ -1,6 +1,8 @@
 package com.backend.remindmap.markerRoute.application;
 
 import com.backend.remindmap.global.utils.GeometryUtil;
+import com.backend.remindmap.group.domain.Group;
+import com.backend.remindmap.group.repository.GroupRepository;
 import com.backend.remindmap.marker.domain.Direction;
 import com.backend.remindmap.marker.domain.Location;
 import com.backend.remindmap.marker.domain.Marker;
@@ -14,21 +16,15 @@ import com.backend.remindmap.markerRoute.domain.MarkerRouteRepository;
 import com.backend.remindmap.markerRoute.dto.request.MarkerRouteCreateRequest;
 import com.backend.remindmap.markerRoute.dto.response.IntegrativeMarkerRouteCreateResponse;
 import com.backend.remindmap.markerRoute.dto.response.MarkerRouteCreateResponse;
-import com.backend.remindmap.markerRoute.dto.response.MarkerRouteResponse;
 import com.backend.remindmap.member.domain.Member;
 import com.backend.remindmap.member.repository.MemberRepository;
 import com.backend.remindmap.route.domain.Route;
 import com.backend.remindmap.route.domain.RouteRepository;
 import com.backend.remindmap.route.dto.response.RouteResponse;
 import lombok.RequiredArgsConstructor;
-import org.locationtech.jts.geom.Point;
-import org.locationtech.jts.io.ParseException;
-import org.locationtech.jts.io.WKTReader;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -43,6 +39,7 @@ public class MarkerRouteService {
     private final MemberRepository memberRepository;
     private final RouteRepository routeRepository;
     private final MarkerRouteRepository markerRouteRepository;
+    private final GroupRepository groupRepository;
 
 
     @Transactional
@@ -85,7 +82,7 @@ public class MarkerRouteService {
 
     public List<RouteResponse> findAllByMarkerLocation(MarkerLocationRequest request) {
 
-        Optional<Marker> markerOptional = markerRepository.findByLatitudeAndLongitude(request.getLatitude(), request.getLongitude());
+        Optional<Marker> markerOptional = markerRepository.findByLocationLatitudeAndLocationLongitude(request.getLatitude(), request.getLongitude());
         if (!markerOptional.isPresent()) {
             return null;
         }
@@ -110,6 +107,31 @@ public class MarkerRouteService {
 
         return routesWithMarkers;
 
+    }
+
+    public List<RouteResponse> findRoutesByGroup(Long groupId) {
+        Group group = groupRepository.findGroupById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 그룹입니다."));
+
+        List<Route> routes = routeRepository.findByGroup(group);
+
+
+        List<RouteResponse> routesWithMarkers = new ArrayList<>();
+        for (Route route : routes) {
+            List<MarkerRoute> markerRoutes = markerRouteRepository.findByRoute(route);
+            List<Marker> markersInRoute = markerRoutes.stream()
+                    .map(MarkerRoute::getMarker)
+                    .collect(Collectors.toList());
+
+            List<MarkerResponse> markerResponses = markersInRoute.stream()
+                    .map(MarkerResponse::fromEntity)
+                    .collect(Collectors.toList());
+
+            RouteResponse routeResponse = RouteResponse.fromEntity(route, markerResponses);
+            routesWithMarkers.add(routeResponse);
+        }
+
+        return routesWithMarkers;
     }
 
 }

@@ -59,4 +59,22 @@ public class MarkerController {
         MarkerResponse response = markerService.updateMarker(markerId, member.getId(), request);
         return ResponseEntity.ok().body(response);
     }
+
+    @PostMapping("/marker/group/{groupId}")
+    public ResponseEntity<MarkerResponse> saveByGroup(
+            @PathVariable final Long groupId,
+            @Valid @RequestBody final MarkerCreateRequest request,
+            HttpServletRequest servletRequest
+    ) throws ParseException {
+        Member member = (Member) servletRequest.getAttribute("member");
+        MarkerResponse response = markerService.saveByGroup(member.getId(), groupId, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping("/marker/group/{groupId}")
+    public List<MarkerResponse> findMarkersByGroup(
+            @PathVariable final Long groupId
+    ) {
+        return markerService.findMarkersByGroup(groupId);
+    }
 }

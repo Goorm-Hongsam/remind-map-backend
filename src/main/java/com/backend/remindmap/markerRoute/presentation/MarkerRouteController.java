@@ -1,6 +1,7 @@
 package com.backend.remindmap.markerRoute.presentation;
 
 import com.backend.remindmap.marker.dto.request.MarkerLocationRequest;
+import com.backend.remindmap.marker.dto.response.MarkerResponse;
 import com.backend.remindmap.markerRoute.application.MarkerRouteService;
 import com.backend.remindmap.markerRoute.dto.request.MarkerRouteCreateRequest;
 import com.backend.remindmap.markerRoute.dto.response.IntegrativeMarkerRouteCreateResponse;
@@ -39,6 +40,13 @@ public class MarkerRouteController {
     ) {
         List<RouteResponse> response = markerRouteService.findAllByMarkerLocation(request);
         return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/route/group/{groupId}")
+    public List<RouteResponse> findMarkersByGroup(
+            @PathVariable final Long groupId
+    ) {
+        return markerRouteService.findRoutesByGroup(groupId);
     }
 
 

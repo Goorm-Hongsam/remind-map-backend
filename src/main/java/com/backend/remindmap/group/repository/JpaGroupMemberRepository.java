@@ -1,4 +1,4 @@
-package com.remind.map.group.repository;
+package com.backend.remindmap.group.repository;
 
 import com.remind.map.group.domain.GroupMember;
 import com.remind.map.group.domain.GroupMemberDto;

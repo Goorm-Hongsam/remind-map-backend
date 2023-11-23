@@ -1,5 +1,6 @@
 package com.backend.remindmap.marker.domain;
 
+import com.backend.remindmap.group.domain.Group;
 import com.backend.remindmap.marker.dto.request.MarkerUpdateRequest;
 import com.backend.remindmap.marker.dto.response.MarkerResponse;
 import com.backend.remindmap.member.domain.Member;
@@ -24,6 +25,10 @@ public class Marker {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "group_id")
+    private Group group;
 
     private String title;
 
@@ -52,6 +57,19 @@ public class Marker {
     @Builder
     public Marker(Member member, Long id, String title, String memo, Location location, Point point, boolean visiable, LocalDateTime wentDate) {
         this.member = member;
+        this.id = id;
+        this.title = title;
+        this.memo = memo;
+        this.location = location;
+        this.point = point;
+        this.visiable = visiable;
+        this.wentDate = wentDate;
+    }
+
+    @Builder(builderMethodName = "markerWithGroupBuilder")
+    public Marker(Member member, Group group, Long id, String title, String memo, Location location, Point point, boolean visiable, LocalDateTime wentDate) {
+        this.member = member;
+        this.group = group;
         this.id = id;
         this.title = title;
         this.memo = memo;

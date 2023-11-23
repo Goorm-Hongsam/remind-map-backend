@@ -1,8 +1,8 @@
-package com.remind.map.group.service;
+package com.backend.remindmap.group.service;
 
-import com.remind.map.group.domain.Group;
+import com.backend.remindmap.group.domain.Group;
+import com.backend.remindmap.group.repository.GroupRepository;
 import com.remind.map.group.domain.GroupDto;
-import com.remind.map.group.repository.GroupRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
