@@ -19,7 +19,10 @@ jobs:
           submodules: recursive
       - name: Copy Code to Remote Server
         run: |
-          scp -r ./* ${{ secrets.REMOTE_PRIVATE_KEY }} ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_IP }}:/home/ubuntu
+          mkdir -p ~/.ssh
+          echo "${{ secrets.REMOTE_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          scp -o StrictHostKeyChecking=no -r ./* ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_IP }}:/home/ubuntu
       - name: excuting remote ssh commands
         uses: appleboy/ssh-action@v0.1.6 # ssh 접속하는 오픈소스
         with:
