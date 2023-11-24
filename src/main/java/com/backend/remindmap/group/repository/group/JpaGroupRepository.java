@@ -1,7 +1,7 @@
-package com.remind.map.group.repository;
+package com.backend.remindmap.group.repository.group;
 
-import com.remind.map.group.domain.Group;
-import com.remind.map.group.domain.GroupDto;
+import com.backend.remindmap.group.domain.group.Group;
+import com.backend.remindmap.group.domain.group.GroupDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,10 +43,11 @@ public class JpaGroupRepository implements GroupRepository{
     }
 
     @Override
-    public List<Group> findAllGroup() {
-        String jpql = "select g from Group g";
+    public List<Group> findAllGroup(Long id) {
+        String jpql = "select g from Group g join GroupMember gm on g.groupId = gm.groupId where gm.memberId = :id";
 
         List<Group> resultList = em.createQuery(jpql, Group.class)
+                .setParameter("id", id)
                 .getResultList();
         return resultList;
     }

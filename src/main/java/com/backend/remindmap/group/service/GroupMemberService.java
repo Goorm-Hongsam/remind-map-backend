@@ -1,26 +1,37 @@
-package com.remind.map.group.service;
+package com.backend.remindmap.group.service;
 
-import com.remind.map.group.domain.GroupMember;
-import com.remind.map.group.domain.GroupMemberDto;
-import com.remind.map.group.repository.GroupMemberRepository;
+
+import com.backend.remindmap.group.domain.groupMember.GroupMember;
+import com.backend.remindmap.group.domain.groupMember.GroupMemberDto;
+import com.backend.remindmap.member.domain.Member;
+import com.backend.remindmap.group.repository.groupMember.GroupMemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 public class GroupMemberService {
 
     private final GroupMemberRepository groupMemberRepository;
+    private final WaitingService waitingService;
 
+    @Transactional
     public GroupMember addMember(GroupMemberDto groupMemberDto) {
         GroupMember groupMember = groupMemberRepository.addMember(groupMemberDto);
+        waitingService.removeMemberToWaiting(groupMemberDto);
         return groupMember;
     }
 
-    public void removeMember(Long id) {
-        groupMemberRepository.removeMember(id);
+    public void removeMember(GroupMemberDto groupMemberDto) {
+        groupMemberRepository.removeMember(groupMemberDto);
+    }
+
+    public List<Member> findAllMember(Long groupId) {
+        return groupMemberRepository.findAllMember(groupId);
     }
 }

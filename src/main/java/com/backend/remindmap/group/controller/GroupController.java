@@ -1,12 +1,15 @@
-package com.remind.map.group.controller;
+package com.backend.remindmap.group.controller;
 
-import com.remind.map.group.domain.Group;
-import com.remind.map.group.domain.GroupDto;
-import com.remind.map.group.service.GroupService;
+
+import com.backend.remindmap.group.domain.group.Group;
+import com.backend.remindmap.group.domain.group.GroupDto;
+import com.backend.remindmap.member.domain.Member;
+import com.backend.remindmap.group.service.GroupService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -39,7 +42,8 @@ public class GroupController {
     }
 
     @GetMapping("/group/getall")
-    public List<Group> getAllGroup() {
-        return groupService.findAllGroup();
+    public List<Group> getAllGroup(HttpServletRequest request) {
+        Member member = (Member) request.getAttribute("member");
+        return groupService.findAllGroup(member.getMemberId());
     }
 }

@@ -1,4 +1,4 @@
-package com.remind.map.group.domain;
+package com.backend.remindmap.group.domain.groupMember;
 
 import lombok.Data;
 
