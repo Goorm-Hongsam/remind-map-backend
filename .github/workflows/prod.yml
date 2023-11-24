@@ -34,12 +34,12 @@ jobs:
             ./gradlew clean build
             cd build/libs/
             chmod +x remindmap-0.0.1-SNAPSHOT.jar
-            cd /home/ubuntu
-            docker-compose down
-            docker rmi -f $(docker images -q)
-            docker builder prune -a --force
-            docker-compose up -d
-            rm -rf remind-map-backend/*
+            # cd /home/ubuntu
+            # docker-compose down
+            # docker rmi -f $(docker images -q)
+            # docker builder prune -a --force
+            # docker-compose up -d
+            # rm -rf remind-map-backend/*
             
             
            
