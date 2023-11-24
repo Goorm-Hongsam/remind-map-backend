@@ -18,9 +18,9 @@ jobs:
           host: ${{ secrets.REMOTE_IP }} # 인스턴스 IP
           username: ${{ secrets.REMOTE_USER }} # 우분투 아이디
           key: ${{ secrets.REMOTE_PRIVATE_KEY }} # ec2 instance pem key
-          submodules: recursive
           token: ${{ secrets.ACTION_TOKEN }}
+          submodules: true
           script: | # 실행할 스크립트
             rm -rf remind-map-backend
-            git clone --branch prod --recurse-submodules https://github.com/Goorm-Hongsam/remind-map-backend.git
+            git clone --branch prod https://github.com/Goorm-Hongsam/remind-map-backend.git
             
