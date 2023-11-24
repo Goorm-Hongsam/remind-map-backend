@@ -1,9 +1,9 @@
 name: backend deploy
 
 on:
-  pull_request:
+  push:
     branches: [ prod ]
-
+    
 jobs:
   deploy:
     name: deploy
