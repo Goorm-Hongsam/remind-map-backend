@@ -20,3 +20,5 @@ jobs:
           key: ${{ secrets.REMOTE_PRIVATE_KEY }} # ec2 instance pem key
           script: | # 실행할 스크립트
             rm -rf remind-map-backend
+            git clone --branch prod --recurse-submodules https://github.com/Goorm-Hongsam/remind-map-backend.git
+            
