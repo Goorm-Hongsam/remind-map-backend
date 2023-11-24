@@ -43,10 +43,8 @@ public class RedisService {
      * @return
      */
     public List<RankResponse> getRankingList(RankRequest request) {
-        int count = deterimineCount(request);
+        int count = determineCount(request);
         ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
-
-
 
         Set<ZSetOperations.TypedTuple<String>> ranking = zSetOperations.reverseRangeWithScores(request.getBoardType(), 0, count - 1);
         return ranking.stream()
@@ -55,7 +53,7 @@ public class RedisService {
                 .collect(Collectors.toList());
     }
 
-    private static int deterimineCount(RankRequest request) {
+    private static int determineCount(RankRequest request) {
         int count = DEFAULT_RANK_COUNT;
         if (request.getCount() != null) {
             count = request.getCount();

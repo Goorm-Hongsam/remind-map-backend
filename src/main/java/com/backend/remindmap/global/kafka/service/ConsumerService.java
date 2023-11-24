@@ -1,5 +1,6 @@
 package com.backend.remindmap.global.kafka.service;
 
+import com.backend.remindmap.global.utils.MarkerMapperUtil;
 import com.backend.remindmap.redis.service.RedisService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
