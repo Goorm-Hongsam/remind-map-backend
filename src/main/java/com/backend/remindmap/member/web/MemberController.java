@@ -33,6 +33,7 @@ public class MemberController {
     /**
      * 카카오 로그인
      * 로컬 테스트일 때만 Get 요청으로 변경해둠
+     *
      */
     @PostMapping("/kakao/kakaoLogin/{code}")
     public ResponseEntity<Member> kakaoLogin(@PathVariable("code") String code, HttpServletResponse response) {
@@ -190,7 +191,7 @@ public class MemberController {
 
 
     // jwt 필터 거친 후 정보 조회 예시
-    // localhost 테스트에서 GET으로 -> 헤더에 보내주는건 POST임
+    // localhost 테스트에서 GET으로 -> 헤더에 보내주는건 POST
 //    @GetMapping("/api/test")
     public Member test(HttpServletRequest request) {
 
