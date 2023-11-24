@@ -12,17 +12,27 @@ jobs:
     runs-on: ubuntu-latest 
 
     steps:
+      - name: Checkout 
+        uses: actions/checkout@v1
+        with:
+          token: ${{ secrets.ACTION_TOKEN }}
+          submodules: recursive
+      - name: Copy Code to Remote Server
+        run: |
+          scp -r ./* ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_IP }}:/home/ubuntu
       - name: excuting remote ssh commands
         uses: appleboy/ssh-action@v0.1.6 # ssh 접속하는 오픈소스
         with:
           host: ${{ secrets.REMOTE_IP }} # 인스턴스 IP
           username: ${{ secrets.REMOTE_USER }} # 우분투 아이디
           key: ${{ secrets.REMOTE_PRIVATE_KEY }} # ec2 instance pem key
-          token: ${{ secrets.ACTION_TOKEN }}
-          submodules: true
           script: | # 실행할 스크립트
-            rm -rf remind-map-backend
-            git clone --branch prod https://github.com/Goorm-Hongsam/remind-map-backend.git
-            cd remind-map-backend
-            git submodule update --init --recursive
+            # docker-compose down
+            # docker rmi -f $(docker images -q)
+            # docker builder prune -a --force
+            # docker-compose up -d
+            # rm -rf remind-map-backend
+            
+            
+           
             
