@@ -29,12 +29,12 @@ jobs:
           host: ${{ secrets.REMOTE_IP }} # 인스턴스 IP
           username: ${{ secrets.REMOTE_USER }} # 우분투 아이디
           key: ${{ secrets.REMOTE_PRIVATE_KEY }} # ec2 instance pem key
-          script: | # 실행할 스크립트
-            docker-compose down
-            docker rmi -f $(docker images -q)
-            docker builder prune -a --force
-            docker-compose up -d
-            rm -rf remind-map-backend/*
+          # script: | # 실행할 스크립트
+          #   docker-compose down
+          #   docker rmi -f $(docker images -q)
+          #   docker builder prune -a --force
+          #   docker-compose up -d
+          #   rm -rf remind-map-backend/*
             
             
            
