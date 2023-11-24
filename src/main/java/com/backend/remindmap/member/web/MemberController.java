@@ -34,7 +34,7 @@ public class MemberController {
      * 카카오 로그인
      * 로컬 테스트일 때만 Get 요청으로 변경해둠
      */
-    @PostMapping("/api/kakao/kakaoLogin/{code}")
+    @PostMapping("/kakao/kakaoLogin/{code}")
     public ResponseEntity<Member> kakaoLogin(@PathVariable("code") String code, HttpServletResponse response) {
 
         log.info("인가코드={}",code);
@@ -106,7 +106,7 @@ public class MemberController {
      * 클라이언트에서 받은 refresh token 유효성 검사
      * localhost 테스트에서 GET -> 배포 후 POST로 바꾸기
      */
-    @PostMapping("/api/login-check/refresh-token")
+    @PostMapping("/login-check/refresh-token")
     public void changeToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         String refreshToken = Arrays.stream(request.getCookies())
@@ -178,7 +178,7 @@ public class MemberController {
     /**
      * 새로고침시 access token 유효성 검사
      */
-    @PostMapping("/api/login-check")
+    @PostMapping("/login-check")
     public Member loginCheck(HttpServletRequest request) {
         return (Member) request.getAttribute("member");
     }
