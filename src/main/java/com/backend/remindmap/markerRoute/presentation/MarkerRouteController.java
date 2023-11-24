@@ -3,7 +3,7 @@ package com.backend.remindmap.markerRoute.presentation;
 import com.backend.remindmap.markerRoute.application.MarkerRouteService;
 import com.backend.remindmap.markerRoute.dto.request.MarkerRouteCreateRequest;
 import com.backend.remindmap.markerRoute.dto.response.IntegrativeMarkerRouteCreateResponse;
-import com.backend.remindmap.member.domain.Member;
+import com.backend.remindmap.member.domain.Member.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

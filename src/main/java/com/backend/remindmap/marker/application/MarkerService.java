@@ -8,7 +8,7 @@ import com.backend.remindmap.marker.domain.MarkerRepository;
 import com.backend.remindmap.marker.dto.request.MarkerCreateRequest;
 import com.backend.remindmap.marker.dto.request.MarkerLocationRequest;
 import com.backend.remindmap.marker.dto.response.MarkerResponse;
-import com.backend.remindmap.member.domain.Member;
+import com.backend.remindmap.member.domain.Member.Member;
 import com.backend.remindmap.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Point;

@@ -6,7 +6,7 @@ import com.backend.remindmap.marker.dto.request.MarkerCreateRequest;
 import com.backend.remindmap.marker.dto.request.MarkerLocationRequest;
 import com.backend.remindmap.marker.dto.request.MarkerRankRequest;
 import com.backend.remindmap.marker.dto.response.MarkerResponse;
-import com.backend.remindmap.member.domain.Member;
+import com.backend.remindmap.member.domain.Member.Member;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.io.ParseException;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.backend.remindmap.member.domain;
+package com.backend.remindmap.member.domain.KakaoMember;
 
 import lombok.Data;
 

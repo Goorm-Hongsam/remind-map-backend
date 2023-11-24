@@ -2,7 +2,7 @@ package com.backend.remindmap.star.application;
 
 import com.backend.remindmap.marker.domain.Marker;
 import com.backend.remindmap.marker.domain.MarkerRepository;
-import com.backend.remindmap.member.domain.Member;
+import com.backend.remindmap.member.domain.Member.Member;
 import com.backend.remindmap.member.repository.MemberRepository;
 import com.backend.remindmap.route.domain.Route;
 import com.backend.remindmap.route.domain.RouteRepository;

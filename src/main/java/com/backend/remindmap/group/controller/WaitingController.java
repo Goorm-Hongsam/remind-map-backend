@@ -2,10 +2,10 @@ package com.backend.remindmap.group.controller;
 
 
 import com.backend.remindmap.group.domain.waiting.InvitedMemberDto;
-import com.backend.remindmap.member.domain.Member;
 import com.backend.remindmap.group.domain.waiting.WaitMemberDto;
 import com.backend.remindmap.group.domain.waiting.WaitingResponse;
 import com.backend.remindmap.group.service.WaitingService;
+import com.backend.remindmap.member.domain.Member.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

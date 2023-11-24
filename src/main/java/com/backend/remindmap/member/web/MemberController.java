@@ -2,8 +2,8 @@ package com.backend.remindmap.member.web;
 
 
 import com.backend.remindmap.Config.JWT.JwtTokenProvider;
-import com.backend.remindmap.member.domain.KakaoTokenDto;
-import com.backend.remindmap.member.domain.Member;
+import com.backend.remindmap.member.domain.KakaoToken.KakaoTokenDto;
+import com.backend.remindmap.member.domain.Member.Member;
 import com.backend.remindmap.member.repository.MemberRepository;
 import com.backend.remindmap.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +34,7 @@ public class MemberController {
     /**
      * 카카오 로그인
      * 로컬 테스트일 때만 Get 요청으로 변경해둠
+     *
      */
     @PostMapping("/kakao/kakaoLogin/{code}")
     public ResponseEntity<Member> kakaoLogin(@PathVariable("code") String code, HttpServletResponse response) {
@@ -41,14 +42,17 @@ public class MemberController {
         log.info("인가코드={}",code);
 
         // kakao 토큰 받기
-        KakaoTokenDto kakaoAccessToken = memberService.getKakaoAccessToken(code);
+        KakaoTokenDto kakaoTokenDto = memberService.getKakaoAccessToken(code);
 
-        log.info("kakao accessToken={}", kakaoAccessToken.getAccess_token());
+        log.info("kakao accessToken={}", kakaoTokenDto.getAccess_token());
 
         // 유서 정보 받기
-        Member member = memberService.getMemberInfo(kakaoAccessToken.getAccess_token());
+        Member member = memberService.getMemberInfo(kakaoTokenDto.getAccess_token());
 
-        // 자체 access token 생성
+        // 카카오 token db 저장
+        memberService.saveKakaoToken(member, kakaoTokenDto);
+
+//         자체 access token 생성
         String accessToken = jwtTokenProvider.createAccessToken(member);
 
         log.info("자체 access token={}",accessToken);
@@ -116,6 +120,9 @@ public class MemberController {
 
         // 유효성 검사
         if (!jwtTokenProvider.validateToken(refreshToken)) {
+            /**
+             * 서버에서 토큰 만료 시키기
+             */
             response.sendError(HttpStatus.UNAUTHORIZED.value(), "로그아웃 해주세요.");
             return;
         }
@@ -126,14 +133,20 @@ public class MemberController {
 
         log.info("db에서 꺼낸 refresh token={}",dbRefreshToken);
 
-        // db 비교 (해야할까?)
+        // db 비교 (해야할까?) -> 질문
         if ( !refreshToken.equals(dbRefreshToken)) {
+            /**
+             * 서버에서 토큰 만료 시키기
+             */
             response.sendError(HttpStatus.UNAUTHORIZED.value(), "로그아웃 해주세요.");
             return;
         }
 
         Optional<Member> member = memberRepository.findMemberById(memberId);
 
+        /**
+         * 나중에 질문
+         */
         if (member.isPresent()) {
             Member m = member.get();
 
@@ -172,9 +185,15 @@ public class MemberController {
         return (Member) request.getAttribute("member");
     }
 
+    /**
+     * 로그아웃
+     */
+
+
+
     // jwt 필터 거친 후 정보 조회 예시
-    // localhost 테스트에서 GET으로
-//    @GetMapping("/test")
+    // localhost 테스트에서 GET으로 -> 헤더에 보내주는건 POST
+//    @GetMapping("/api/test")
     public Member test(HttpServletRequest request) {
 
         String token = Arrays.stream(request.getCookies())

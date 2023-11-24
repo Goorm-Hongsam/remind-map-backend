@@ -1,6 +1,6 @@
 package com.backend.remindmap.Config.JWT;
 
-import com.backend.remindmap.member.domain.Member;
+import com.backend.remindmap.member.domain.Member.Member;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -58,7 +58,7 @@ public class JwtTokenProvider {
 
     // 모든 token에 대한 사용자 속성정보 조회
     public Member getMemberByAccessToken(String token) {
-        Claims claims =  parserBuilder()
+        Claims claims = parserBuilder()
                 .setSigningKey(jwtSecretKey)
                 .build()
                 .parseClaimsJws(token)

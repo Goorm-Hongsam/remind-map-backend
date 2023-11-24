@@ -31,7 +31,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         log.info("시크릿키={}",jwtSecretKey);
 
-        String jwtHeader = ((HttpServletRequest) request).getHeader("Authorization");
+        String jwtHeader = request.getHeader("Authorization");
+
+        log.info("헤더에서 들어온 jwtHeader={}",jwtHeader);
 
         // header 가 정상적인 형식인지 확인
         if (jwtHeader == null || !jwtHeader.startsWith("Bearer ")) {

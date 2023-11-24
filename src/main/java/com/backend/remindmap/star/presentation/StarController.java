@@ -3,7 +3,7 @@ package com.backend.remindmap.star.presentation;
 
 import com.backend.remindmap.marker.domain.Marker;
 import com.backend.remindmap.marker.dto.response.MarkerResponse;
-import com.backend.remindmap.member.domain.Member;
+import com.backend.remindmap.member.domain.Member.Member;
 import com.backend.remindmap.route.domain.Route;
 import com.backend.remindmap.route.dto.response.RouteResponse;
 import com.backend.remindmap.star.application.StarService;

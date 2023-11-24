@@ -1,6 +1,6 @@
 package com.backend.remindmap.route.domain;
 
-import com.backend.remindmap.member.domain.Member;
+import com.backend.remindmap.member.domain.Member.Member;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

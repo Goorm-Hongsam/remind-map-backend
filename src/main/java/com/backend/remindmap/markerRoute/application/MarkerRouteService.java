@@ -9,7 +9,7 @@ import com.backend.remindmap.markerRoute.domain.MarkerRouteRepository;
 import com.backend.remindmap.markerRoute.dto.request.MarkerRouteCreateRequest;
 import com.backend.remindmap.markerRoute.dto.response.IntegrativeMarkerRouteCreateResponse;
 import com.backend.remindmap.markerRoute.dto.response.MarkerRouteCreateResponse;
-import com.backend.remindmap.member.domain.Member;
+import com.backend.remindmap.member.domain.Member.Member;
 import com.backend.remindmap.member.repository.MemberRepository;
 import com.backend.remindmap.route.domain.Route;
 import com.backend.remindmap.route.domain.RouteRepository;

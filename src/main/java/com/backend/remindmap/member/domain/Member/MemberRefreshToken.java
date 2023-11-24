@@ -1,4 +1,4 @@
-package com.backend.remindmap.member.domain;
+package com.backend.remindmap.member.domain.Member;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

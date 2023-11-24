@@ -3,7 +3,7 @@ package com.backend.remindmap.group.repository.groupMember;
 
 import com.backend.remindmap.group.domain.groupMember.GroupMember;
 import com.backend.remindmap.group.domain.groupMember.GroupMemberDto;
-import com.backend.remindmap.member.domain.Member;
+import com.backend.remindmap.member.domain.Member.Member;
 
 import java.util.List;
 

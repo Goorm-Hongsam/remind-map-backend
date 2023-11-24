@@ -3,8 +3,8 @@ package com.backend.remindmap.group.controller;
 
 import com.backend.remindmap.group.domain.group.Group;
 import com.backend.remindmap.group.domain.group.GroupDto;
-import com.backend.remindmap.member.domain.Member;
 import com.backend.remindmap.group.service.GroupService;
+import com.backend.remindmap.member.domain.Member.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

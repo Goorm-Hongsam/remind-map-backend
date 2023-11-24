@@ -1,7 +1,7 @@
 package com.backend.remindmap.star.domain;
 
 import com.backend.remindmap.marker.domain.Marker;
-import com.backend.remindmap.member.domain.Member;
+import com.backend.remindmap.member.domain.Member.Member;
 import com.backend.remindmap.route.domain.Route;
 import org.springframework.data.jpa.repository.JpaRepository;
 

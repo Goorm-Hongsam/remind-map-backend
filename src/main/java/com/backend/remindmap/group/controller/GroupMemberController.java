@@ -2,8 +2,8 @@ package com.backend.remindmap.group.controller;
 
 import com.backend.remindmap.group.domain.groupMember.GroupMember;
 import com.backend.remindmap.group.domain.groupMember.GroupMemberDto;
-import com.backend.remindmap.member.domain.Member;
 import com.backend.remindmap.group.service.GroupMemberService;
+import com.backend.remindmap.member.domain.Member.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.DeleteMapping;
