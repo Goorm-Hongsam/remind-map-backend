@@ -1,8 +1,8 @@
-package com.remind.map.group.repository;
+package com.backend.remindmap.group.repository.group;
 
-import com.remind.map.group.domain.Group;
-import com.remind.map.group.domain.GroupDto;
-import com.remind.map.group.domain.GroupMember;
+
+import com.backend.remindmap.group.domain.group.Group;
+import com.backend.remindmap.group.domain.group.GroupDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,5 +17,5 @@ public interface GroupRepository {
 
     Optional<Group> findGroupById(Long id);
 
-    List<Group> findAllGroup();
+    List<Group> findAllGroup(Long id);
 }
