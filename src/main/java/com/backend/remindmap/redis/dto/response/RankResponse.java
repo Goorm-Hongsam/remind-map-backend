@@ -17,13 +17,15 @@ public class RankResponse {
 
     private Long id;
     private String title;
+    private String memo;
     private String nickName;
     private LocalDateTime wentDate;
 
     @Builder
-    private RankResponse(Long id, String title, String nickName, LocalDateTime wentDate) {
-        id = id;
+    private RankResponse(Long id, String title, String memo, String nickName, LocalDateTime wentDate) {
+        this.id = id;
         this.title = title;
+        this.memo = memo;
         this.nickName = nickName;
         this.wentDate = wentDate;
     }
@@ -32,6 +34,7 @@ public class RankResponse {
         return RankResponse.builder()
                 .id(marker.getId())
                 .title(marker.getTitle())
+                .memo(marker.getMemo())
                 .nickName(marker.getMember().getNickname())
                 .wentDate(marker.getWentDate())
                 .build();
