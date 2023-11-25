@@ -76,7 +76,7 @@ public class MarkerRouteService {
 
         Optional<Marker> markerOptional = markerRepository.findByLocationLatitudeAndLocationLongitude(request.getLatitude(), request.getLongitude());
         if (!markerOptional.isPresent()) {
-            return null;
+            return new ArrayList<>();
         }
 
         Marker marker = markerOptional.get();
