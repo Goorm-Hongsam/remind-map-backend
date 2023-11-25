@@ -51,6 +51,10 @@ dependencies {
 	/* redis */
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
+	/* s3 */
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+
 }
 
 tasks.named('bootBuildImage') {
@@ -65,9 +69,9 @@ jar {
 	enabled = false
 }
 
-processResources.dependsOn('copySecret')
-tasks.register('copySecret', Copy) {
-	from './src/main/resources/security'
-	include "application*.yml"
-	into 'src/main/resources'
-}
+//processResources.dependsOn('copySecret')
+//tasks.register('copySecret', Copy) {
+//	from './src/main/resources/security'
+//	include "application*.yml"
+//	into 'src/main/resources'
+//}
