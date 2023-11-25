@@ -29,11 +29,12 @@ public class MarkerCreateRequest {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime wentDate;
 
-    public Marker toEntity(Member member, Point point) {
+    public Marker toEntity(Member member, Point point, String imageUrl) {
         return Marker.builder()
                 .member(member)
                 .title(title)
                 .memo(memo)
+                .imageUrl(imageUrl)
                 .location(location)
                 .wentDate(wentDate)
                 .point(point)
