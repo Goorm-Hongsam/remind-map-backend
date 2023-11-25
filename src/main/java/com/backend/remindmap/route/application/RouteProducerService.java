@@ -1,8 +1,8 @@
-package com.backend.remindmap.marker.application;
+package com.backend.remindmap.route.application;
 
 import com.backend.remindmap.global.kafka.service.ProducerService;
 import com.backend.remindmap.global.utils.MapperUtil;
-import com.backend.remindmap.marker.dto.request.MarkerRankRequest;
+import com.backend.remindmap.route.dto.request.RouteRankRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -10,13 +10,12 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class MarkerProducerService {
+public class RouteProducerService {
 
     private final ProducerService producerService;
 
-    public void send(MarkerRankRequest request) {
-        String message = MapperUtil.convertMarkerRankToJson(request);
+    public void send(RouteRankRequest request) {
+        String message = MapperUtil.convertRouteRankToJson(request);
         producerService.sendMessageToKafka(message);
     }
-
 }

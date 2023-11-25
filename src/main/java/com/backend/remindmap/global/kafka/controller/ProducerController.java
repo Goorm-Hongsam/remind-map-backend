@@ -1,6 +1,6 @@
 package com.backend.remindmap.global.kafka.controller;
 
-import com.backend.remindmap.global.utils.MarkerMapperUtil;
+import com.backend.remindmap.global.utils.MapperUtil;
 import com.backend.remindmap.marker.dto.request.MarkerRankRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,7 @@ public class ProducerController {
 
         Long markerId = 1L;
         MarkerRankRequest request = MarkerRankRequest.from(markerId);
-        String message = MarkerMapperUtil.convertToJson(request);
+        String message = MapperUtil.convertMarkerRankToJson(request);
 
         ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(markerTopic.name(), message);
         future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
