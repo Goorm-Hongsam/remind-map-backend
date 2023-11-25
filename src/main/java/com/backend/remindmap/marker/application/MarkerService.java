@@ -34,12 +34,12 @@ public class MarkerService {
     private static final Double SEARCH_MAX_DISTANCE = 10.0;
 
     @Transactional
-    public MarkerResponse save(final Long id, final MarkerCreateRequest request) throws ParseException {
+    public MarkerResponse save(final Long id, final MarkerCreateRequest request, String imageUrl) throws ParseException {
         Member member = memberRepository.findMemberById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));;
 
         Point point = convertRequestToPoint(request);
-        Marker marker = request.toEntity(member, point);
+        Marker marker = request.toEntity(member, point, imageUrl);
 
         Marker savedMarker = markerRepository.save(marker);
         return MarkerResponse.fromEntity(savedMarker);
@@ -102,6 +102,5 @@ public class MarkerService {
         Marker marker = markerRepository.getById(id);
         markerRepository.delete(marker);
     }
-
 
 }

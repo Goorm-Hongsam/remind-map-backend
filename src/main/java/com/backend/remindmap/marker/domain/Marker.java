@@ -28,6 +28,8 @@ public class Marker {
 
     private String memo;
 
+    private String imageUrl;
+
     @Embedded
     private Location location;
 
@@ -45,11 +47,12 @@ public class Marker {
     private LocalDateTime wentDate;
 
     @Builder
-    public Marker(Member member, Long id, String title, String memo, Location location, Point point, LocalDateTime wentDate) {
+    public Marker(Member member, Long id, String title, String memo, String imageUrl, Location location, Point point, LocalDateTime wentDate) {
         this.member = member;
         this.id = id;
         this.title = title;
         this.memo = memo;
+        this.imageUrl = imageUrl;
         this.location = location;
         this.point = point;
         this.wentDate = wentDate;
@@ -60,6 +63,7 @@ public class Marker {
                 .id(this.id)
                 .title(this.title)
                 .memo(this.memo)
+                .imageUrl(this.imageUrl)
                 .location(this.location)
                 .wentDate(this.wentDate)
                 .build();

@@ -1,5 +1,6 @@
 package com.backend.remindmap.marker.presentation;
 
+import com.backend.remindmap.global.s3.S3UploadService;
 import com.backend.remindmap.marker.application.MarkerProducerService;
 import com.backend.remindmap.marker.application.MarkerService;
 import com.backend.remindmap.marker.dto.request.MarkerCreateRequest;
@@ -10,11 +11,14 @@ import com.backend.remindmap.member.domain.Member.Member;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.io.ParseException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -23,14 +27,18 @@ public class MarkerController {
 
     private final MarkerService markerService;
     private final MarkerProducerService markerProducerService;
+    private final S3UploadService uploadService;
 
-    @PostMapping("/marker")
+    @PostMapping(path =  "/marker", consumes= {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<MarkerResponse> save(
-            @Valid @RequestBody final MarkerCreateRequest request,
-            HttpServletRequest servletRequest
-    ) throws ParseException {
+            HttpServletRequest servletRequest,
+            @RequestPart(value = "request") MarkerCreateRequest request,
+            @RequestPart(value = "file") MultipartFile multipartFile
+            ) throws ParseException, IOException {
         Member member = (Member) servletRequest.getAttribute("member");
-        MarkerResponse response = markerService.save(member.getMemberId(), request);
+        String imageUrl = uploadService.uploadFile("marker", multipartFile);
+        MarkerResponse response = markerService.save(member.getMemberId(), request, imageUrl);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 

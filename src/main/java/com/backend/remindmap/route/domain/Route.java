@@ -29,6 +29,8 @@ public class Route {
     @Column
     private String memo;
 
+    private String imageUrl;
+
     @Column(nullable = false)
     private boolean visiable;
 
@@ -40,10 +42,11 @@ public class Route {
     private LocalDateTime wentDate;
 
     @Builder
-    public Route(Member member, String title, String memo, boolean visiable, int view, LocalDateTime wentDate) {
+    public Route(Member member, String title, String memo, String imageUrl, boolean visiable, int view, LocalDateTime wentDate) {
         this.member = member;
         this.title = title;
         this.memo = memo;
+        this.imageUrl = imageUrl;
         this.visiable = visiable;
         this.view = view;
         this.wentDate = wentDate;
