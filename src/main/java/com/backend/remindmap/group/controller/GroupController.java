@@ -3,6 +3,8 @@ package com.backend.remindmap.group.controller;
 
 import com.backend.remindmap.group.domain.group.Group;
 import com.backend.remindmap.group.domain.group.GroupDto;
+import com.backend.remindmap.group.domain.groupMember.GroupMemberDto;
+import com.backend.remindmap.group.service.GroupMemberService;
 import com.backend.remindmap.group.service.GroupService;
 import com.backend.remindmap.member.domain.Member.Member;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +20,13 @@ import java.util.List;
 public class GroupController {
 
     private final GroupService groupService;
+    private final GroupMemberService groupMemberService;
 
     @PostMapping("/group/create")
-    public Group createGroup(@RequestBody GroupDto groupDto) {
+    public Group createGroup(@RequestBody GroupDto groupDto, HttpServletRequest request) {
+        Member member = (Member) request.getAttribute("member");
         Group group = groupService.createGroup(groupDto);
+        groupMemberService.addMemberHost(new GroupMemberDto(group.getGroupId(), member.getMemberId()));
         return group;
     }
 

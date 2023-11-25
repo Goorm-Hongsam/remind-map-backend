@@ -5,4 +5,8 @@ import lombok.Data;
 @Data
 public class GroupDto {
     private String title;
+
+    public GroupDto(String title) {
+        this.title = title;
+    }
 }
