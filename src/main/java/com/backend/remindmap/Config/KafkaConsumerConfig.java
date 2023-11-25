@@ -26,7 +26,7 @@ public class KafkaConsumerConfig {
      * @return
      */
     @Bean
-    public ConsumerFactory<String, String> consumerFactory(){
+    public ConsumerFactory<String, String> consumerMarkerFactory(){
         Map<String, Object> properties = new HashMap<>();
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, producerBootstrapAddress);
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, "group1");
@@ -36,19 +36,39 @@ public class KafkaConsumerConfig {
         return new DefaultKafkaConsumerFactory<>(properties);
     }
 
+    @Bean
+    public ConsumerFactory<String, String> consumerRouteFactory() {
+        Map<String, Object> properties = new HashMap<>();
+        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, producerBootstrapAddress);
+        properties.put(ConsumerConfig.GROUP_ID_CONFIG, "group2");
+        properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+
+        return new DefaultKafkaConsumerFactory<>(properties);
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactoryForRouteGroup() {
+        ConcurrentKafkaListenerContainerFactory<String, String> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(consumerRouteFactory());
+        return factory;
+    }
+
     /**
      *
      * @return
      */
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory(){
+    public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactoryForMarkerGroup(){
         ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory =
                 new ConcurrentKafkaListenerContainerFactory<>();
 
         //해당 Consumer가 사용하고자 하는 Kafka 설정메서드를 기입
-        kafkaListenerContainerFactory.setConsumerFactory(consumerFactory());
+        kafkaListenerContainerFactory.setConsumerFactory(consumerMarkerFactory());
 
         return kafkaListenerContainerFactory;
     }
+
 
 }

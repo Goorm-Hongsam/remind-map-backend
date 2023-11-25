@@ -13,9 +13,8 @@ public class RouteRankRequest {
     private String type = "route";
 
     @Builder
-    private RouteRankRequest(String typeId, String type) {
+    private RouteRankRequest(String typeId) {
         this.typeId = typeId;
-        this.type = type;
     }
 
     public static RouteRankRequest from(Long routeId) {

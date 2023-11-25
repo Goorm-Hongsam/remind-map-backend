@@ -35,7 +35,7 @@ public class MarkerRouteService {
     @Transactional
     public IntegrativeMarkerRouteCreateResponse save(final Long memberId, final MarkerRouteCreateRequest request) {
         Member member = memberRepository.findMemberById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));;
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
 
         List<Long> markerIds = request.getMarkerIds();
         List<MarkerRouteCreateResponse> responses = new ArrayList<>();

@@ -37,6 +37,24 @@ public class ConsumerService {
         log.info(markerId + " " + type);
 
         redisService.addScore(type, markerId);
-        log.info("consume message: {} from partition: {}", message, partition);
+        log.info("Marker consume message: {} from partition: {}", message, partition);
+    }
+
+    @KafkaListener(topics = "#{routeTopic.name}", groupId = "group2")
+    public void consumeRouteTopic(@Payload String message, @Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition) {
+        Map<Object, Object> map = new HashMap<>();
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            map = mapper.readValue(message, new TypeReference<>() {});
+        } catch (JsonProcessingException ex) {
+            ex.printStackTrace();
+        }
+        String routeId = (String) map.get("typeId");
+        String type = (String) map.get("type");
+        log.info(routeId + " " + type);
+
+        redisService.addScore(type, routeId);
+        log.info("Route consume message: {} from partition: {}", message, partition);
     }
 }

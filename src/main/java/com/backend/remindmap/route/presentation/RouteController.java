@@ -1,6 +1,8 @@
 package com.backend.remindmap.route.presentation;
 
+import com.backend.remindmap.route.application.RouteProducerService;
 import com.backend.remindmap.route.application.RouteService;
+import com.backend.remindmap.route.dto.request.RouteRankRequest;
 import com.backend.remindmap.route.dto.response.RouteResponse;
 import com.backend.remindmap.route.dto.response.RoutesResponse;
 import lombok.RequiredArgsConstructor;
@@ -15,10 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class RouteController {
 
     private final RouteService routeService;
+    private final RouteProducerService routeProducerService;
 
     @GetMapping("/route/{routeId}")
     public ResponseEntity<RouteResponse> findRouteWithMarkers(@PathVariable final Long routeId) {
         RouteResponse routeWithMarkers = routeService.findRouteWithMarkers(routeId);
+        routeProducerService.send(RouteRankRequest.from(routeId));
         return ResponseEntity.ok().body(routeWithMarkers);
     }
 
