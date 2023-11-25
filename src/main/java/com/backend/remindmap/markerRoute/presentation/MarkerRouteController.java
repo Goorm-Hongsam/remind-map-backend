@@ -1,5 +1,7 @@
 package com.backend.remindmap.markerRoute.presentation;
 
+import com.backend.remindmap.global.s3.S3UploadService;
+import com.backend.remindmap.marker.dto.request.MarkerCreateRequest;
 import com.backend.remindmap.marker.dto.request.MarkerLocationRequest;
 import com.backend.remindmap.markerRoute.application.MarkerRouteService;
 import com.backend.remindmap.markerRoute.dto.request.MarkerRouteCreateRequest;
@@ -8,11 +10,14 @@ import com.backend.remindmap.member.domain.Member.Member;
 import com.backend.remindmap.route.dto.response.RouteResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -20,14 +25,17 @@ import java.util.List;
 public class MarkerRouteController {
 
     private final MarkerRouteService markerRouteService;
+    private final S3UploadService uploadService;
 
-    @PostMapping("/marker-route")
+    @PostMapping(path = "/marker-route", consumes= {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<IntegrativeMarkerRouteCreateResponse> save(
-            @Valid @RequestBody final MarkerRouteCreateRequest request,
+            @RequestPart(value = "request") MarkerRouteCreateRequest request,
+            @RequestPart(value = "file") MultipartFile multipartFile,
             HttpServletRequest servletRequest
-    ) {
+    ) throws IOException {
         Member member = (Member) servletRequest.getAttribute("member");
-        IntegrativeMarkerRouteCreateResponse response = markerRouteService.save(member.getMemberId(), request);
+        String imageUrl = uploadService.uploadFile("route", multipartFile);
+        IntegrativeMarkerRouteCreateResponse response = markerRouteService.save(member.getMemberId(), request, imageUrl);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
