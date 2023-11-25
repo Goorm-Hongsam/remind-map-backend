@@ -9,4 +9,6 @@ public class GroupDto {
     public GroupDto(String title) {
         this.title = title;
     }
+    public GroupDto() {
+    }
 }
