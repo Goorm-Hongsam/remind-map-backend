@@ -12,4 +12,7 @@ public class GroupMemberDto {
         this.groupId = groupId;
         this.memberId = memberId;
     }
+
+    public GroupMemberDto() {
+    }
 }
