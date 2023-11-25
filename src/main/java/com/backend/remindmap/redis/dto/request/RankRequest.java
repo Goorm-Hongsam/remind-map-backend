@@ -10,9 +10,6 @@ import javax.validation.constraints.NotNull;
 @Getter
 public class RankRequest {
 
-    @NotBlank(message = "공백일 수는 없습니다.")
-    private String boardType;
-
     @NotNull(message = "공백일 수는 없습니다.")
     private Integer count;
 }

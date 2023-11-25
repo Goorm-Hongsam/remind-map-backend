@@ -53,7 +53,7 @@ public class RedisService {
         int count = determineCount(request);
         ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
 
-        Set<ZSetOperations.TypedTuple<String>> ranking = zSetOperations.reverseRangeWithScores(request.getBoardType(), 0, count - 1);
+        Set<ZSetOperations.TypedTuple<String>> ranking = zSetOperations.reverseRangeWithScores("marker", 0, count - 1);
         return ranking.stream()
                 .map(tuple -> markerRepository.getById(Long.parseLong(tuple.getValue())))
                 .map(RankResponse::fromMarker)
@@ -64,7 +64,7 @@ public class RedisService {
         int count = determineCount(request);
         ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
 
-        Set<ZSetOperations.TypedTuple<String>> ranking = zSetOperations.reverseRangeWithScores(request.getBoardType(), 0, count - 1);
+        Set<ZSetOperations.TypedTuple<String>> ranking = zSetOperations.reverseRangeWithScores("route", 0, count - 1);
         return ranking.stream()
                 .map(tuple -> routeRepository.getById(Long.parseLong(tuple.getValue())))
                 .map(route -> {
