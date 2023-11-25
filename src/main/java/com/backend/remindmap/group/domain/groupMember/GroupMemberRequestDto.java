@@ -6,4 +6,7 @@ import lombok.Data;
 public class GroupMemberRequestDto {
 
     private Long groupId;
+
+    public GroupMemberRequestDto() {
+    }
 }

@@ -1,6 +1,4 @@
 package com.backend.remindmap.group.controller;
-
-
 import com.backend.remindmap.group.domain.group.Group;
 import com.backend.remindmap.group.domain.group.GroupDto;
 import com.backend.remindmap.group.domain.groupMember.GroupMemberDto;
@@ -26,6 +24,7 @@ public class GroupController {
     public Group createGroup(@RequestBody GroupDto groupDto, HttpServletRequest request) {
         Member member = (Member) request.getAttribute("member");
         Group group = groupService.createGroup(groupDto);
+        log.info("groupId = {}, memberId = {}", group.getGroupId(), member.getMemberId());
         groupMemberService.addMemberHost(new GroupMemberDto(group.getGroupId(), member.getMemberId()));
         return group;
     }

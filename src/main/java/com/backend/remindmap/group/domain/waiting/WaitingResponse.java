@@ -19,4 +19,8 @@ public class WaitingResponse {
         this.memberId = memberId;
         this.leaderId = leaderId;
     }
+
+    public WaitingResponse() {
+    }
+
 }

@@ -13,4 +13,7 @@ public class InvitedMemberDto {
         this.groupId = groupId;
         this.leaderId = leaderId;
     }
+
+    public InvitedMemberDto() {
+    }
 }
