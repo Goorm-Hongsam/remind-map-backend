@@ -1,7 +1,7 @@
 name: backend deploy
 
 on:
-  # push:
+  # push: 
   pull_request:
     branches: [ prod2 ]
 

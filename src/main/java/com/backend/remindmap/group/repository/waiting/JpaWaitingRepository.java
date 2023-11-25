@@ -37,7 +37,7 @@ public class JpaWaitingRepository implements WaitingRepository{
 
     @Override
     public List<WaitingResponse> findAll(Long memberId) {
-        String jpql = "select new com.backend.remindmap.group.domain.WaitingResponse(m.nickname, g.title, w.groupId, w.memberId, w.leaderId) " +
+        String jpql = "select new com.backend.remindmap.group.domain.waiting.WaitingResponse(m.nickname, g.title, w.groupId, w.memberId, w.leaderId) " +
                 "from Waiting w " +
                 "join Group g on w.groupId = g.groupId " +
                 "join Member m on w.leaderId = m.memberId" +
