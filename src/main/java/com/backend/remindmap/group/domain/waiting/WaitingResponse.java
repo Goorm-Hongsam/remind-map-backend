@@ -2,6 +2,8 @@ package com.backend.remindmap.group.domain.waiting;
 
 import lombok.Data;
 
+import javax.persistence.Entity;
+
 @Data
 public class WaitingResponse {
     private String nickname;
