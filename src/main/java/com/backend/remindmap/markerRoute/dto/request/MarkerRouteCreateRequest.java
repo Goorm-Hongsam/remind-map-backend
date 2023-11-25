@@ -47,11 +47,12 @@ public class MarkerRouteCreateRequest {
                 .build();
     }
 
-    public Route toRoute(Member member) {
+    public Route toRoute(Member member, String imageUrl) {
         return Route.builder()
                 .member(member)
                 .title(title)
                 .memo(memo)
+                .imageUrl(imageUrl)
                 .visiable(visiable)
                 .view(0)
                 .wentDate(wentDate)

@@ -74,3 +74,4 @@ tasks.register('copySecret', Copy) {
 	include "application*.yml"
 	into 'src/main/resources'
 }
+
