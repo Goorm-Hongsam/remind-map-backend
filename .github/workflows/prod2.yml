@@ -1,8 +1,8 @@
 name: backend deploy
 
 on:
-  push:
-  # pull_request:
+  # push:
+  pull_request:
     branches: [ prod2 ]
     
 jobs:
@@ -34,11 +34,16 @@ jobs:
             cd build/libs/
             chmod +x remindmap-0.0.1-SNAPSHOT.jar
             cd /home/ubuntu
-            docker-compose down
-            docker rm $(docker ps -aq)
-            docker rmi -f $(docker images -q)
-            docker builder prune -a --force
-            docker-compose up -d
+            docker-compose -f docker-compose.back.yaml down
+            docker rm back
+            docker rm ubuntu-kafka-1
+            docker rm redis
+            docker rm ubuntu-zookeeper-1
+            docker rmi -f ubuntu-web
+            docker rmi -f redis
+            docker rmi -f confluentinc/cp-kafka
+            docker rmi -f confluentinc/cp-zookeeper
+            docker-compose -f docker-compose.back.yaml up -d
             
             
            
