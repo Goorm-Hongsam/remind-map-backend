@@ -27,6 +27,11 @@ public class GroupMemberService {
         return groupMember;
     }
 
+    public GroupMember addMemberHost(GroupMemberDto groupMemberDto) {
+        GroupMember groupMember = groupMemberRepository.addMember(groupMemberDto);
+        return groupMember;
+    }
+
     public void removeMember(GroupMemberDto groupMemberDto) {
         groupMemberRepository.removeMember(groupMemberDto);
     }
