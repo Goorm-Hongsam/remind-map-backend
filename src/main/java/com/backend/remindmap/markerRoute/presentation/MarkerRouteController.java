@@ -39,4 +39,5 @@ public class MarkerRouteController {
         List<RouteResponse> response = markerRouteService.findAllByMarkerLocation(request);
         return ResponseEntity.ok().body(response);
     }
+
 }

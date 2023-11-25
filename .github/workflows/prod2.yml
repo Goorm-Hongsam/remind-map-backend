@@ -4,14 +4,14 @@ on:
   # push:
   pull_request:
     branches: [ prod2 ]
-    
+
 jobs:
   deploy:
     name: deploy
-    runs-on: ubuntu-latest 
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout 
+      - name: Checkout
         uses: actions/checkout@v2
         with:
           token: ${{ secrets.ACTION_TOKEN }}
@@ -47,4 +47,3 @@ jobs:
             
             
            
-            
