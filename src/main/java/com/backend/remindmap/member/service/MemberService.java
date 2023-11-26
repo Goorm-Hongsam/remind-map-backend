@@ -199,7 +199,6 @@ public class MemberService {
                 accountInfoRequest,
                 String.class
         );
-        log.info("카카오 로그아웃");
 
     }
 
