@@ -31,7 +31,7 @@ public interface MarkerRepository extends JpaRepository<Marker, Long> {
             "m.location.longitude = :longitude AND " +
             "m.visiable = :visible AND " +
             "m.member.memberId = :memberId")
-    Optional<Marker> findMarkerByLatitudeLongitudeVisibilityAndMemberId(@Param("latitude") Double latitude,
+    List<Marker> findMarkerByLatitudeLongitudeVisibilityAndMemberId(@Param("latitude") Double latitude,
                                                                         @Param("longitude") Double longitude,
                                                                         @Param("visible") boolean visible,
                                                                         @Param("memberId") Long memberId);
