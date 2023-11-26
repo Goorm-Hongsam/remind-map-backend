@@ -52,19 +52,6 @@ public class Marker {
     private LocalDateTime wentDate;
 
     @Builder
-    public Marker(Member member, Long id, String title, String memo, String imageUrl, boolean visiable, Location location, Point point, LocalDateTime wentDate) {
-        this.member = member;
-        this.id = id;
-        this.title = title;
-        this.memo = memo;
-        this.imageUrl = imageUrl;
-        this.visiable = visiable;
-        this.location = location;
-        this.point = point;
-        this.wentDate = wentDate;
-    }
-
-    @Builder(builderMethodName = "markerWithGroupBuilder")
     public Marker(Member member, Group group, Long id, String title, String memo, String imageUrl, Location location, Point point, boolean visiable, LocalDateTime wentDate) {
         this.member = member;
         this.group = group;

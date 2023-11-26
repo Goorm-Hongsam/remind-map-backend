@@ -34,21 +34,8 @@ public class MarkerCreateRequest {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime wentDate;
 
-    public Marker toEntity(Member member, Point point, String imageUrl) {
-        return Marker.builder()
-                .member(member)
-                .title(title)
-                .memo(memo)
-                .imageUrl(imageUrl)
-                .visiable(visiable)
-                .location(location)
-                .wentDate(wentDate)
-                .point(point)
-                .build();
-    }
-
     public Marker toEntityByGroup(Member member, Group group, Point point, String imageUrl) {
-        return Marker.markerWithGroupBuilder()
+        return Marker.builder()
                 .member(member)
                 .group(group)
                 .title(title)

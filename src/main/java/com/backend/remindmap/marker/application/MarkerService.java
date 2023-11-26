@@ -36,18 +36,6 @@ public class MarkerService {
 
     private static final Double SEARCH_MAX_DISTANCE = 10.0;
 
-    @Transactional
-    public MarkerResponse save(final Long id, final MarkerCreateRequest request, String imageUrl) throws ParseException {
-        Member member = memberRepository.findMemberById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));;
-
-        Point point = convertRequestToPoint(request);
-        Marker marker = request.toEntity(member, point, imageUrl);
-
-        Marker savedMarker = markerRepository.save(marker);
-        return MarkerResponse.fromEntity(savedMarker);
-    }
-
     public List<MarkerResponse> findMarkersByLocation(MarkerLocationRequest request) {
         Location northEast = GeometryUtil.calculate(request.getLatitude(), request.getLongitude(), SEARCH_MAX_DISTANCE, Direction.NORTHEAST.getBearing());
         Location southWest = GeometryUtil.calculate(request.getLatitude(), request.getLongitude(), SEARCH_MAX_DISTANCE, Direction.SOUTHWEST.getBearing());
