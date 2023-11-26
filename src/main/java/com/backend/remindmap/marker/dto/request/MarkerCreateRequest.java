@@ -25,6 +25,8 @@ public class MarkerCreateRequest {
     @NotBlank(message = "내용이 공백일 수 없습니다.")
     private String memo;
 
+    private String imageUrl;
+
     private Location location;
 
     private boolean visiable;
@@ -45,12 +47,13 @@ public class MarkerCreateRequest {
                 .build();
     }
 
-    public Marker toEntityByGroup(Member member, Group group, Point point) {
+    public Marker toEntityByGroup(Member member, Group group, Point point, String imageUrl) {
         return Marker.markerWithGroupBuilder()
                 .member(member)
                 .group(group)
                 .title(title)
                 .memo(memo)
+                .imageUrl(imageUrl)
                 .visiable(visiable)
                 .location(location)
                 .wentDate(wentDate)

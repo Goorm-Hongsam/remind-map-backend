@@ -37,16 +37,18 @@ public class MarkerRouteService {
     private final MarkerRouteRepository markerRouteRepository;
     private final GroupRepository groupRepository;
 
-
     @Transactional
-    public IntegrativeMarkerRouteCreateResponse save(final Long memberId, final MarkerRouteCreateRequest request, String imageUrl) {
+    public IntegrativeMarkerRouteCreateResponse save(final Long groupId, final Long memberId, final MarkerRouteCreateRequest request, String imageUrl) {
+        Group group = groupRepository.findGroupById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 그룹입니다."));
+
         Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
 
         List<Long> markerIds = request.getMarkerIds();
         List<MarkerRouteCreateResponse> responses = new ArrayList<>();
 
-        Route route = request.toRoute(member, imageUrl);
+        Route route = request.toRoute(member, imageUrl, group);
         routeRepository.save(route);
 
         List<Marker> markers = markerRepository.findAllById(markerIds);

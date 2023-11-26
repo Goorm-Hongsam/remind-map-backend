@@ -1,5 +1,6 @@
 package com.backend.remindmap.markerRoute.dto.request;
 
+import com.backend.remindmap.group.domain.group.Group;
 import com.backend.remindmap.marker.domain.Marker;
 import com.backend.remindmap.markerRoute.domain.MarkerRoute;
 import com.backend.remindmap.member.domain.Member.Member;
@@ -47,9 +48,10 @@ public class MarkerRouteCreateRequest {
                 .build();
     }
 
-    public Route toRoute(Member member, String imageUrl) {
+    public Route toRoute(Member member, String imageUrl, Group group) {
         return Route.builder()
                 .member(member)
+                .group(group)
                 .title(title)
                 .memo(memo)
                 .imageUrl(imageUrl)
