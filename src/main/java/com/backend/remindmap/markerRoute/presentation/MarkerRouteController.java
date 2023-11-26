@@ -28,8 +28,12 @@ public class MarkerRouteController {
     private final S3UploadService uploadService;
 
     @GetMapping("/marker-route")
-    public ResponseEntity<List<RouteResponse>> findAllByMarkerLocation(@ModelAttribute MarkerLocationRequest request) {
-        List<RouteResponse> response = markerRouteService.findAllByMarkerLocation(request);
+    public ResponseEntity<List<RouteResponse>> findAllByMarkerLocation(
+            @ModelAttribute MarkerLocationRequest request,
+            HttpServletRequest servletRequest
+            ) {
+        Member member = (Member) servletRequest.getAttribute("member");
+        List<RouteResponse> response = markerRouteService.findAllByMarkerLocation(member.getMemberId(), request);
         return ResponseEntity.ok().body(response);
     }
 

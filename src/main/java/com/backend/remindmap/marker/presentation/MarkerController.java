@@ -30,8 +30,12 @@ public class MarkerController {
     private final S3UploadService uploadService;
 
     @GetMapping("/markers")
-    public List<MarkerResponse> findMarkersByLocation(@ModelAttribute MarkerLocationRequest request) {
-        return markerService.findMarkersByLocation(request);
+    public List<MarkerResponse> findMarkersByLocation(
+            @ModelAttribute MarkerLocationRequest request,
+            HttpServletRequest servletRequest
+    ) {
+        Member member = (Member) servletRequest.getAttribute("member");
+        return markerService.findMarkersByLocation(member.getMemberId(), request);
     }
 
     @GetMapping("/marker/{markerId}")

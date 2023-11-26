@@ -77,20 +77,44 @@ public class MarkerRouteService {
                 .collect(Collectors.toList());
     }
 
-    public List<RouteResponse> findAllByMarkerLocation(MarkerLocationRequest request) {
+    public List<RouteResponse> findAllByMarkerLocation(Long memberId, MarkerLocationRequest request) {
+        if (memberId != null) {
+            return processRequestWithMemberId(memberId, request);
+        }
+        return processRequestWithoutMemberId(request);
+    }
 
-        Optional<Marker> markerOptional = markerRepository.findByLocationLatitudeAndLocationLongitude(request.getLatitude(), request.getLongitude());
+    private List<RouteResponse> processRequestWithMemberId(Long memberId, MarkerLocationRequest request) {
+        Optional<Marker> markerOptional = markerRepository.findByLocationLatitudeAndLocationLongitudeAndVisiableAndMemberMemberId(
+                request.getLatitude(), request.getLongitude(), true, memberId);
+
         if (!markerOptional.isPresent()) {
             return new ArrayList<>();
         }
 
         Marker marker = markerOptional.get();
-        List<MarkerRoute> markerRoutes = markerRouteRepository.findByMarker(marker);
+        List<MarkerRoute> markerRoutes = markerRouteRepository.findByMarkerAndRouteVisiableAndRouteMemberId(marker, true, memberId);
+        return buildRouteResponses(markerRoutes);
+    }
 
+    private List<RouteResponse> processRequestWithoutMemberId(MarkerLocationRequest request) {
+        Optional<Marker> markerOptional = markerRepository.findByLocationLatitudeAndLocationLongitudeAndVisiable(
+                request.getLatitude(), request.getLongitude(), true);
+
+        if (!markerOptional.isPresent()) {
+            return new ArrayList<>();
+        }
+
+        Marker marker = markerOptional.get();
+        List<MarkerRoute> markerRoutes = markerRouteRepository.findByMarkerAndRouteVisiable(marker, true);
+        return buildRouteResponses(markerRoutes);
+    }
+
+    private List<RouteResponse> buildRouteResponses(List<MarkerRoute> markerRoutes) {
         List<RouteResponse> routesWithMarkers = new ArrayList<>();
         for (MarkerRoute markerRoute : markerRoutes) {
             Route route = markerRoute.getRoute();
-            List<Marker> markersInRoute = markerRouteRepository.findByRoute(route).stream()
+            List<Marker> markersInRoute = markerRouteRepository.findByRouteAndMarkerVisiable(route, true).stream()
                     .map(MarkerRoute::getMarker)
                     .collect(Collectors.toList());
 
@@ -103,8 +127,8 @@ public class MarkerRouteService {
         }
 
         return routesWithMarkers;
-
     }
+
 
     public List<RouteResponse> findRoutesByGroup(Long groupId) {
         Group group = groupRepository.findGroupById(groupId)
