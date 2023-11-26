@@ -33,7 +33,7 @@ public class MarkerRouteController {
         return ResponseEntity.ok().body(response);
     }
 
-    @PostMapping(path = "/marker-route/{groupId}", consumes= {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(path = "/marker-route/group/{groupId}", consumes= {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<IntegrativeMarkerRouteCreateResponse> save(
             @PathVariable final Long groupId,
             @RequestPart(value = "request") MarkerRouteCreateRequest request,
