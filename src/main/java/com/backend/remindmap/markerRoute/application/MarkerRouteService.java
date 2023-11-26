@@ -85,7 +85,7 @@ public class MarkerRouteService {
     }
 
     private List<RouteResponse> processRequestWithMemberId(Long memberId, MarkerLocationRequest request) {
-        Optional<Marker> markerOptional = markerRepository.findByLocationLatitudeAndLocationLongitudeAndVisiableAndMemberMemberId(
+        Optional<Marker> markerOptional = markerRepository.findMarkerByLatitudeLongitudeVisibilityAndMemberId(
                 request.getLatitude(), request.getLongitude(), true, memberId);
 
         if (!markerOptional.isPresent()) {
@@ -98,7 +98,7 @@ public class MarkerRouteService {
     }
 
     private List<RouteResponse> processRequestWithoutMemberId(MarkerLocationRequest request) {
-        Optional<Marker> markerOptional = markerRepository.findByLocationLatitudeAndLocationLongitudeAndVisiable(
+        Optional<Marker> markerOptional = markerRepository.findMarkerByLatitudeLongitudeAndVisibility(
                 request.getLatitude(), request.getLongitude(), true);
 
         if (!markerOptional.isPresent()) {
