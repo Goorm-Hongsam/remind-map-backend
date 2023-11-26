@@ -17,8 +17,6 @@ public interface MarkerRouteRepository extends JpaRepository<MarkerRoute, Long> 
 
     List<MarkerRoute> findByMarkerAndRouteVisiable(Marker marker, boolean visiable);
 
-    List<MarkerRoute> findByRouteAndMarkerVisiableAndMarkerMemberId(Route route, boolean visiable, Long memberId);
-
-    List<MarkerRoute> findByMarkerAndRouteVisiableAndRouteMemberId(Marker marker, boolean visiable, Long memberId);
+    List<MarkerRoute> findByMarkerAndRouteVisiableAndRouteMemberMemberId(Marker marker, boolean visiable, Long memberId);
 }
 

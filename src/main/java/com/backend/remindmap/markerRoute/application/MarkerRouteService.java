@@ -93,7 +93,7 @@ public class MarkerRouteService {
         }
 
         Marker marker = markerOptional.get();
-        List<MarkerRoute> markerRoutes = markerRouteRepository.findByMarkerAndRouteVisiableAndRouteMemberId(marker, true, memberId);
+        List<MarkerRoute> markerRoutes = markerRouteRepository.findByMarkerAndRouteVisiableAndRouteMemberMemberId(marker, true, memberId);
         return buildRouteResponses(markerRoutes);
     }
 
