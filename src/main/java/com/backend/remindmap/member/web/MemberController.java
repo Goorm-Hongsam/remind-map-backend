@@ -188,7 +188,7 @@ public class MemberController {
     /**
      * 로그아웃
      */
-    @PostMapping("/logout")
+    @PostMapping("/out")
     public ResponseEntity<?> logout(HttpServletRequest request) {
 
         Member member = (Member) request.getAttribute("member");
