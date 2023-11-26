@@ -36,19 +36,34 @@ public class MarkerService {
 
     private static final Double SEARCH_MAX_DISTANCE = 10.0;
 
-    public List<MarkerResponse> findMarkersByLocation(MarkerLocationRequest request) {
+    public List<MarkerResponse> findMarkersByLocation(Long memberId, MarkerLocationRequest request) {
         Location northEast = GeometryUtil.calculate(request.getLatitude(), request.getLongitude(), SEARCH_MAX_DISTANCE, Direction.NORTHEAST.getBearing());
         Location southWest = GeometryUtil.calculate(request.getLatitude(), request.getLongitude(), SEARCH_MAX_DISTANCE, Direction.SOUTHWEST.getBearing());
 
-        List<Marker> markers = searchMarkersWithinBounds(northEast, southWest);
+        if (!memberId.equals(null)) {
+            List<Marker> markers = searchMarkersWithinBounds(northEast, southWest, memberId);
+            return convertMarkersToDTOs(markers);
+        }
 
+        List<Marker> markers = searchMarkersWithinBounds(northEast, southWest);
         return convertMarkersToDTOs(markers);
     }
 
-    public MarkerResponse findMarker(final Long markerId) {
-        Marker marker = markerRepository.getById(markerId);
+    public List<Marker> searchMarkersWithinBounds(Location northEast, Location southWest, Long memberId) {
+        String pointFormat = String.format(
+                "'LINESTRING(%f %f, %f %f)'",
+                northEast.getLatitude(), northEast.getLongitude(), southWest.getLatitude(), southWest.getLongitude()
+        );
 
-        return marker.toResponse();
+        Query query = em.createNativeQuery(
+                        "SELECT * FROM markers AS m " +
+                        "WHERE MBRContains(ST_LINESTRINGFROMTEXT(" + pointFormat + "), m.point)" +
+                        "AND (m.visiable = true OR m.member_id = :memberId)",
+                Marker.class
+        ).setMaxResults(10);
+        query.setParameter("memberId", memberId);
+
+        return query.getResultList();
     }
 
     public List<Marker> searchMarkersWithinBounds(Location northEast, Location southWest) {
@@ -58,12 +73,19 @@ public class MarkerService {
         );
 
         Query query = em.createNativeQuery(
-                "" +
-                        "SELECT * FROM markers AS m WHERE MBRContains(ST_LINESTRINGFROMTEXT(" + pointFormat + "), m.point)",
+                        "SELECT * FROM markers AS m " +
+                        "WHERE MBRContains(ST_LINESTRINGFROMTEXT(" + pointFormat + "), m.point)" +
+                        "AND m.visiable = true",
                 Marker.class
         ).setMaxResults(10);
 
         return query.getResultList();
+    }
+
+    public MarkerResponse findMarker(final Long markerId) {
+        Marker marker = markerRepository.getById(markerId);
+
+        return marker.toResponse();
     }
 
     public List<MarkerResponse> convertMarkersToDTOs(List<Marker> markers) {
@@ -77,7 +99,7 @@ public class MarkerService {
     }
 
     public Point convertLocationToPoint(Location location) throws ParseException {
-        if (location != null) {
+        if (!location.equals(null)) {
             return createPointFromCoordinates(location.getLatitude(), location.getLongitude());
         }
         return null;
