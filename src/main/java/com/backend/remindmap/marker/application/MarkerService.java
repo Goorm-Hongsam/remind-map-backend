@@ -106,6 +106,7 @@ public class MarkerService {
         markerRepository.delete(marker);
     }
 
+    @Transactional
     public MarkerResponse saveByGroup(Long memberId, Long groupId, MarkerCreateRequest request, String imageUrl) throws ParseException {
         Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
