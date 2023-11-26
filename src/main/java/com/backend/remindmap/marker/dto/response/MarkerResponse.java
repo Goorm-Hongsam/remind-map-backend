@@ -20,16 +20,18 @@ public class MarkerResponse {
     private String title;
     private String memo;
     private String imageUrl;
+    private boolean visiable;
     private Location location;
     private LocalDateTime wentDate;
 
     @Builder
-    public MarkerResponse(Long id, String nickName, String title, String memo, String imageUrl, Location location, LocalDateTime wentDate) {
+    public MarkerResponse(Long id, String nickName, String title, String memo, String imageUrl, boolean visiable, Location location, LocalDateTime wentDate) {
         this.id = id;
         this.nickName = nickName;
         this.title = title;
         this.memo = memo;
         this.imageUrl = imageUrl;
+        this.visiable = visiable;
         this.location = location;
         this.wentDate = wentDate;
     }
@@ -41,6 +43,7 @@ public class MarkerResponse {
                 .title(marker.getTitle())
                 .memo(marker.getMemo())
                 .imageUrl(marker.getImageUrl())
+                .visiable(marker.isVisiable())
                 .wentDate(marker.getWentDate())
                 .location(marker.getLocation())
                 .build();

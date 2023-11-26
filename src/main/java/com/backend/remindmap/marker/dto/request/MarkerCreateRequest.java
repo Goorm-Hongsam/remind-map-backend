@@ -1,5 +1,6 @@
 package com.backend.remindmap.marker.dto.request;
 
+import com.backend.remindmap.group.domain.group.Group;
 import com.backend.remindmap.marker.domain.Location;
 import com.backend.remindmap.marker.domain.Marker;
 import com.backend.remindmap.member.domain.Member.Member;
@@ -26,6 +27,8 @@ public class MarkerCreateRequest {
 
     private Location location;
 
+    private boolean visiable;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime wentDate;
 
@@ -35,6 +38,20 @@ public class MarkerCreateRequest {
                 .title(title)
                 .memo(memo)
                 .imageUrl(imageUrl)
+                .visiable(visiable)
+                .location(location)
+                .wentDate(wentDate)
+                .point(point)
+                .build();
+    }
+
+    public Marker toEntityByGroup(Member member, Group group, Point point) {
+        return Marker.markerWithGroupBuilder()
+                .member(member)
+                .group(group)
+                .title(title)
+                .memo(memo)
+                .visiable(visiable)
                 .location(location)
                 .wentDate(wentDate)
                 .point(point)

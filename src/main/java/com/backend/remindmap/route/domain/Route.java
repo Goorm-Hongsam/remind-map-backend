@@ -1,5 +1,6 @@
 package com.backend.remindmap.route.domain;
 
+import com.backend.remindmap.group.domain.group.Group;
 import com.backend.remindmap.member.domain.Member.Member;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -23,6 +24,10 @@ public class Route {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "group_id")
+    private Group group;
 
     private String title;
 

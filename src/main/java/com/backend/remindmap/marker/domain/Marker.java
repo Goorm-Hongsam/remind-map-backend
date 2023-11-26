@@ -1,5 +1,6 @@
 package com.backend.remindmap.marker.domain;
 
+import com.backend.remindmap.group.domain.group.Group;
 import com.backend.remindmap.marker.dto.response.MarkerResponse;
 import com.backend.remindmap.member.domain.Member.Member;
 import lombok.*;
@@ -24,6 +25,10 @@ public class Marker {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "group_id")
+    private Group group;
+
     private String title;
 
     private String memo;
@@ -47,14 +52,28 @@ public class Marker {
     private LocalDateTime wentDate;
 
     @Builder
-    public Marker(Member member, Long id, String title, String memo, String imageUrl, Location location, Point point, LocalDateTime wentDate) {
+    public Marker(Member member, Long id, String title, String memo, String imageUrl, boolean visiable, Location location, Point point, LocalDateTime wentDate) {
         this.member = member;
         this.id = id;
         this.title = title;
         this.memo = memo;
         this.imageUrl = imageUrl;
+        this.visiable = visiable;
         this.location = location;
         this.point = point;
+        this.wentDate = wentDate;
+    }
+
+    @Builder(builderMethodName = "markerWithGroupBuilder")
+    public Marker(Member member, Group group, Long id, String title, String memo, Location location, Point point, boolean visiable, LocalDateTime wentDate) {
+        this.member = member;
+        this.group = group;
+        this.id = id;
+        this.title = title;
+        this.memo = memo;
+        this.location = location;
+        this.point = point;
+        this.visiable = visiable;
         this.wentDate = wentDate;
     }
 
@@ -64,6 +83,7 @@ public class Marker {
                 .title(this.title)
                 .memo(this.memo)
                 .imageUrl(this.imageUrl)
+                .visiable(this.visiable)
                 .location(this.location)
                 .wentDate(this.wentDate)
                 .build();

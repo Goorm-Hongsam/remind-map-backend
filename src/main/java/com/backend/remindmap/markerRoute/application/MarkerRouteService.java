@@ -1,5 +1,7 @@
 package com.backend.remindmap.markerRoute.application;
 
+import com.backend.remindmap.group.domain.group.Group;
+import com.backend.remindmap.group.repository.group.GroupRepository;
 import com.backend.remindmap.marker.domain.Marker;
 import com.backend.remindmap.marker.domain.MarkerRepository;
 import com.backend.remindmap.marker.dto.request.MarkerLocationRequest;
@@ -33,6 +35,7 @@ public class MarkerRouteService {
     private final MemberRepository memberRepository;
     private final RouteRepository routeRepository;
     private final MarkerRouteRepository markerRouteRepository;
+    private final GroupRepository groupRepository;
 
 
     @Transactional
@@ -99,5 +102,30 @@ public class MarkerRouteService {
 
         return routesWithMarkers;
 
+    }
+
+    public List<RouteResponse> findRoutesByGroup(Long groupId) {
+        Group group = groupRepository.findGroupById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 그룹입니다."));
+
+        List<Route> routes = routeRepository.findByGroup(group);
+
+
+        List<RouteResponse> routesWithMarkers = new ArrayList<>();
+        for (Route route : routes) {
+            List<MarkerRoute> markerRoutes = markerRouteRepository.findByRoute(route);
+            List<Marker> markersInRoute = markerRoutes.stream()
+                    .map(MarkerRoute::getMarker)
+                    .collect(Collectors.toList());
+
+            List<MarkerResponse> markerResponses = markersInRoute.stream()
+                    .map(MarkerResponse::fromEntity)
+                    .collect(Collectors.toList());
+
+            RouteResponse routeResponse = RouteResponse.fromEntity(route, markerResponses);
+            routesWithMarkers.add(routeResponse);
+        }
+
+        return routesWithMarkers;
     }
 }

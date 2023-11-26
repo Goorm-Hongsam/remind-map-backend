@@ -45,4 +45,11 @@ public class MarkerRouteController {
         return ResponseEntity.ok().body(response);
     }
 
+    @GetMapping("/route/group/{groupId}")
+    public List<RouteResponse> findMarkersByGroup(
+            @PathVariable final Long groupId
+    ) {
+        return markerRouteService.findRoutesByGroup(groupId);
+    }
+
 }
