@@ -29,28 +29,9 @@ public class MarkerController {
     private final MarkerProducerService markerProducerService;
     private final S3UploadService uploadService;
 
-    @PostMapping(path =  "/marker", consumes= {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<MarkerResponse> save(
-            HttpServletRequest servletRequest,
-            @RequestPart(value = "request") MarkerCreateRequest request,
-            @RequestPart(value = "file") MultipartFile multipartFile
-            ) throws ParseException, IOException {
-        Member member = (Member) servletRequest.getAttribute("member");
-        String imageUrl = uploadService.uploadFile("marker", multipartFile);
-        MarkerResponse response = markerService.save(member.getMemberId(), request, imageUrl);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
-
     @GetMapping("/markers")
     public List<MarkerResponse> findMarkersByLocation(@ModelAttribute MarkerLocationRequest request) {
         return markerService.findMarkersByLocation(request);
-    }
-
-    @DeleteMapping("/marker/{markerId}")
-    public ResponseEntity<Void> delete(@PathVariable final Long markerId) {
-        markerService.delete(markerId);
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/marker/{markerId}")
@@ -60,14 +41,22 @@ public class MarkerController {
         return ResponseEntity.ok().body(response);
     }
 
-    @PostMapping("/marker/group/{groupId}")
+    @DeleteMapping("/marker/{markerId}")
+    public ResponseEntity<Void> delete(@PathVariable final Long markerId) {
+        markerService.delete(markerId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(path = "/marker/group/{groupId}", consumes= {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<MarkerResponse> saveByGroup(
             @PathVariable final Long groupId,
-            @Valid @RequestBody final MarkerCreateRequest request,
+            @RequestPart(value = "request") MarkerCreateRequest request,
+            @RequestPart(value = "file") MultipartFile multipartFile,
             HttpServletRequest servletRequest
-    ) throws ParseException {
+    ) throws ParseException, IOException {
         Member member = (Member) servletRequest.getAttribute("member");
-        MarkerResponse response = markerService.saveByGroup(member.getMemberId(), groupId, request);
+        String imageUrl = uploadService.uploadFile("marker", multipartFile);
+        MarkerResponse response = markerService.saveByGroup(member.getMemberId(), groupId, request, imageUrl);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -77,4 +66,5 @@ public class MarkerController {
     ) {
         return markerService.findMarkersByGroup(groupId);
     }
+
 }

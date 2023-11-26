@@ -47,8 +47,9 @@ public class Route {
     private LocalDateTime wentDate;
 
     @Builder
-    public Route(Member member, String title, String memo, String imageUrl, boolean visiable, int view, LocalDateTime wentDate) {
+    public Route(Member member, Group group, String title, String memo, String imageUrl, boolean visiable, int view, LocalDateTime wentDate) {
         this.member = member;
+        this.group = group;
         this.title = title;
         this.memo = memo;
         this.imageUrl = imageUrl;

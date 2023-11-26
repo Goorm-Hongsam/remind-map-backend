@@ -106,7 +106,7 @@ public class MarkerService {
         markerRepository.delete(marker);
     }
 
-    public MarkerResponse saveByGroup(Long memberId, Long groupId, MarkerCreateRequest request) throws ParseException {
+    public MarkerResponse saveByGroup(Long memberId, Long groupId, MarkerCreateRequest request, String imageUrl) throws ParseException {
         Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
 
@@ -114,7 +114,7 @@ public class MarkerService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 그룹입니다."));
 
         Point point = convertRequestToPoint(request);
-        Marker marker = request.toEntityByGroup(member, group, point);
+        Marker marker = request.toEntityByGroup(member, group, point, imageUrl);
 
         Marker savedMarker = markerRepository.save(marker);
         return MarkerResponse.fromEntity(savedMarker);

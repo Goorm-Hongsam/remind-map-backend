@@ -27,22 +27,23 @@ public class MarkerRouteController {
     private final MarkerRouteService markerRouteService;
     private final S3UploadService uploadService;
 
-    @PostMapping(path = "/marker-route", consumes= {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @GetMapping("/marker-route")
+    public ResponseEntity<List<RouteResponse>> findAllByMarkerLocation(@ModelAttribute MarkerLocationRequest request) {
+        List<RouteResponse> response = markerRouteService.findAllByMarkerLocation(request);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping(path = "/marker-route/{groupId}", consumes= {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<IntegrativeMarkerRouteCreateResponse> save(
+            @PathVariable final Long groupId,
             @RequestPart(value = "request") MarkerRouteCreateRequest request,
             @RequestPart(value = "file") MultipartFile multipartFile,
             HttpServletRequest servletRequest
     ) throws IOException {
         Member member = (Member) servletRequest.getAttribute("member");
         String imageUrl = uploadService.uploadFile("route", multipartFile);
-        IntegrativeMarkerRouteCreateResponse response = markerRouteService.save(member.getMemberId(), request, imageUrl);
+        IntegrativeMarkerRouteCreateResponse response = markerRouteService.save(groupId, member.getMemberId(), request, imageUrl);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
-
-    @GetMapping("/marker-route")
-    public ResponseEntity<List<RouteResponse>> findAllByMarkerLocation(@ModelAttribute MarkerLocationRequest request) {
-        List<RouteResponse> response = markerRouteService.findAllByMarkerLocation(request);
-        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/route/group/{groupId}")

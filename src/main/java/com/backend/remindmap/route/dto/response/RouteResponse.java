@@ -18,15 +18,17 @@ public class RouteResponse {
     private Long id;
     private String title;
     private LocalDateTime wentDate;
+    private boolean visiable;
     private String memo;
     private String imageUrl;
     private List<MarkerResponse> markers;
 
     @Builder
-    public RouteResponse(Long id, String title, String memo, String imageUrl, LocalDateTime wentDate, List<MarkerResponse> markers) {
+    public RouteResponse(Long id, String title, String memo, String imageUrl, boolean visiable, LocalDateTime wentDate, List<MarkerResponse> markers) {
         this.id = id;
         this.title = title;
         this.memo = memo;
+        this.visiable = visiable;
         this.imageUrl = imageUrl;
         this.wentDate = wentDate;
         this.markers = markers;
@@ -38,6 +40,7 @@ public class RouteResponse {
                 .title(route.getTitle())
                 .wentDate(route.getWentDate())
                 .memo(route.getMemo())
+                .visiable(route.isVisiable())
                 .imageUrl(route.getImageUrl())
                 .markers(markers)
                 .build();
@@ -49,6 +52,7 @@ public class RouteResponse {
                 .title(route.getTitle())
                 .wentDate(route.getWentDate())
                 .memo(route.getMemo())
+                .visiable(route.isVisiable())
                 .imageUrl(route.getImageUrl())
                 .build();
     }

@@ -65,12 +65,13 @@ public class Marker {
     }
 
     @Builder(builderMethodName = "markerWithGroupBuilder")
-    public Marker(Member member, Group group, Long id, String title, String memo, Location location, Point point, boolean visiable, LocalDateTime wentDate) {
+    public Marker(Member member, Group group, Long id, String title, String memo, String imageUrl, Location location, Point point, boolean visiable, LocalDateTime wentDate) {
         this.member = member;
         this.group = group;
         this.id = id;
         this.title = title;
         this.memo = memo;
+        this.imageUrl = imageUrl;
         this.location = location;
         this.point = point;
         this.visiable = visiable;
