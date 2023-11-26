@@ -16,5 +16,5 @@ public interface MarkerRepository extends JpaRepository<Marker, Long> {
 
     Optional<Marker> findByLocationLatitudeAndLocationLongitude(double latitude, double longitude);
 
-    List<Marker> findByGroup(final Group group);
+    List<Marker> findByGroup(Group group);
 }
