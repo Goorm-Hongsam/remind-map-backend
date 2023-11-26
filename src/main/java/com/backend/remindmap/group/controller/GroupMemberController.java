@@ -6,10 +6,7 @@ import com.backend.remindmap.group.service.GroupMemberService;
 import com.backend.remindmap.member.domain.Member.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -46,5 +43,6 @@ public class GroupMemberController {
     public List<Member> getMember(@PathVariable Long groupId) {
         return groupMemberService.findAllMember(groupId);
     }
+
 
 }
