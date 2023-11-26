@@ -189,7 +189,7 @@ public class MemberController {
      * 로그아웃
      */
     @PostMapping("/logout")
-    public void logout(HttpServletRequest request) {
+    public ResponseEntity<?> logout(HttpServletRequest request) {
 
         Member member = (Member) request.getAttribute("member");
 
@@ -202,6 +202,8 @@ public class MemberController {
         // 카카오 토큰 저장 지우기
         memberService.deleteDbKakaoToken(member.getMemberId());
         log.info("db kakao token 지우기");
+
+        return ResponseEntity.ok().build();
 
     }
 
