@@ -5,6 +5,7 @@ import com.backend.remindmap.member.domain.Member.Member;
 import com.backend.remindmap.member.domain.Member.MemberRefreshToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -12,6 +13,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
+@Transactional
 public class MemberRepository {
 
     private final EntityManager em;
@@ -54,4 +56,19 @@ public class MemberRepository {
         }
     }
 
+    public void deleteDbRefreshToken(Long memberId) {
+        String jpql = "delete from MemberRefreshToken rt where rt.memberId = :memberId";
+        em.createQuery(jpql)
+                .setParameter("memberId", memberId)
+                .executeUpdate();
+    }
+
+    public void deleteDbKakaoToken(Long memberId) {
+
+        String jpql = "delete from KakaoMemberToken kt where kt.memberId = :memberId";
+        em.createQuery(jpql)
+                .setParameter("memberId", memberId)
+                .executeUpdate();
+
+    }
 }
