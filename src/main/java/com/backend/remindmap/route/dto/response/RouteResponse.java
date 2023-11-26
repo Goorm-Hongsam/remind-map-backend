@@ -16,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RouteResponse {
     private Long id;
+    private String routeMaker;
     private String title;
     private LocalDateTime wentDate;
     private boolean visiable;
@@ -24,8 +25,9 @@ public class RouteResponse {
     private List<MarkerResponse> markers;
 
     @Builder
-    public RouteResponse(Long id, String title, String memo, String imageUrl, boolean visiable, LocalDateTime wentDate, List<MarkerResponse> markers) {
+    public RouteResponse(Long id, String routeMaker, String title, String memo, String imageUrl, boolean visiable, LocalDateTime wentDate, List<MarkerResponse> markers) {
         this.id = id;
+        this.routeMaker = routeMaker;
         this.title = title;
         this.memo = memo;
         this.visiable = visiable;
@@ -37,6 +39,7 @@ public class RouteResponse {
     public static RouteResponse fromEntity(Route route, List<MarkerResponse> markers) {
         return RouteResponse.builder()
                 .id(route.getId())
+                .routeMaker(route.getMember().getNickname())
                 .title(route.getTitle())
                 .wentDate(route.getWentDate())
                 .memo(route.getMemo())
@@ -50,6 +53,7 @@ public class RouteResponse {
         return RouteResponse.builder()
                 .id(route.getId())
                 .title(route.getTitle())
+                .routeMaker(route.getMember().getNickname())
                 .wentDate(route.getWentDate())
                 .memo(route.getMemo())
                 .visiable(route.isVisiable())
