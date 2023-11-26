@@ -1,6 +1,7 @@
 package com.backend.remindmap.group.controller;
 
 
+import com.backend.remindmap.group.domain.groupMember.GroupMemberDto;
 import com.backend.remindmap.group.domain.waiting.InvitedMemberDto;
 import com.backend.remindmap.group.domain.waiting.WaitMemberDto;
 import com.backend.remindmap.group.domain.waiting.WaitingResponse;
@@ -37,6 +38,13 @@ public class WaitingController {
     public List<WaitingResponse> getAllList(HttpServletRequest request) {
         Member member = (Member) request.getAttribute("member");
         return waitingService.getWaitingList(member.getMemberId());
+    }
+
+    @GetMapping("/invite/refuse/{groupId}")
+    public void refuseInvite(@PathVariable Long groupId, HttpServletRequest request) {
+        Member member = (Member) request.getAttribute("member");
+        GroupMemberDto groupMemberDto = new GroupMemberDto(groupId, member.getMemberId());
+        waitingService.removeMemberToWaiting(groupMemberDto);
     }
 
 
