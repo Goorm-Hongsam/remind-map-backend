@@ -182,34 +182,66 @@ public class MemberService {
         }
     }
 
+    public void expireKakaoToken(Long memberId) {
+        KakaoMemberToken kakaoMemberToken = getDbKakaoMemberToken(memberId);
+
+        RestTemplate rt = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + kakaoMemberToken.getKakaoAccessToken());
+
+        HttpEntity<MultiValueMap<String, String>> accountInfoRequest = new HttpEntity<>(headers);
+
+        // POST 방식으로 API 서버에 요청 후 response 받아옴
+        ResponseEntity<String> accountInfoResponse = rt.exchange(
+                "https://kapi.kakao.com/v1/user/logout",
+                HttpMethod.POST,
+                accountInfoRequest,
+                String.class
+        );
+        log.info("카카오 로그아웃");
+
+    }
+
+    public void deleteDbRefreshToken(Long memberId) {
+        memberRepository.deleteDbRefreshToken(memberId);
+    }
+
+    public void deleteDbKakaoToken(Long memberId) {
+        memberRepository.deleteDbKakaoToken(memberId);
+    }
+
+
     // 로그아웃
-//    public void logout(String kakaoAccessToken) {
-//
-//        RestTemplate rt = new RestTemplate();
-//
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.add("Authorization", "Bearer " + kakaoAccessToken);
-//        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-//
-//        HttpEntity<MultiValueMap<String, String>> accountInfoRequest = new HttpEntity<>(headers);
-//
-//        // POST 방식으로 API 서버에 요청 후 response 받아옴
-//        ResponseEntity<String> accountInfoResponse = rt.exchange(
-//                "https://kapi.kakao.com/v2/user/me",
-//                HttpMethod.POST,
-//                accountInfoRequest,
-//                String.class
-//        );
-//
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        objectMapper.registerModule(new JavaTimeModule());
-//        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-//        KakaoUerInfoDto kakaoUerInfoDto = null;
-//        try {
-//            kakaoUerInfoDto = objectMapper.readValue(accountInfoResponse.getBody(), KakaoUerInfoDto.class);
-//        } catch (JsonProcessingException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    public void logout(String kakaoAccessToken) {
+
+        RestTemplate rt = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + kakaoAccessToken);
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+
+        HttpEntity<MultiValueMap<String, String>> accountInfoRequest = new HttpEntity<>(headers);
+
+        // POST 방식으로 API 서버에 요청 후 response 받아옴
+        ResponseEntity<String> accountInfoResponse = rt.exchange(
+                "https://kapi.kakao.com/v2/user/me",
+                HttpMethod.POST,
+                accountInfoRequest,
+                String.class
+        );
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        KakaoUerInfoDto kakaoUerInfoDto = null;
+        try {
+            kakaoUerInfoDto = objectMapper.readValue(accountInfoResponse.getBody(), KakaoUerInfoDto.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 }
 

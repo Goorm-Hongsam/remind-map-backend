@@ -188,6 +188,19 @@ public class MemberController {
     /**
      * 로그아웃
      */
+    @PostMapping("/logout")
+    public void logout(HttpServletRequest request) {
+
+        Member member = (Member) request.getAttribute("member");
+
+        // 카카오 토큰 만료 시키기
+        memberService.expireKakaoToken(member.getMemberId());
+        // 자체 refresh token 지우기
+        memberService.deleteDbRefreshToken(member.getMemberId());
+        // 카카오 토큰 저장 지우기
+        memberService.deleteDbKakaoToken(member.getMemberId());
+
+    }
 
 
 
