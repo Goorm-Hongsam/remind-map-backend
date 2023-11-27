@@ -160,9 +160,11 @@ public class MarkerService {
         Marker marker = markerRepository.getById(request.getMarkerId());
         marker.updateWith(request, imgUrl);
 
-        log.info(marker.getTitle());
+        log.info(request.getTitle());
+        log.info(request.getMemo());
 
         Marker savedMarker = markerRepository.save(marker);
+        log.info(savedMarker.getTitle());
         return MarkerResponse.fromEntity(savedMarker);
     }
 

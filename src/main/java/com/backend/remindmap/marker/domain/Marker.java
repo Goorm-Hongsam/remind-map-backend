@@ -79,18 +79,16 @@ public class Marker {
                 .build();
     }
 
-    public Marker updateWith(MarkerUpdateRequest request, String imageUrl) {
-        return new Marker(
-                this.member,
-                this.group,
-                this.id,
-                request.getTitle() != null ? request.getTitle() : this.title,
-                request.getMemo() != null ? request.getMemo() : this.memo,
-                imageUrl != null ? imageUrl : this.imageUrl,
-                this.location,
-                this.point,
-                request.isVisiable() != this.visiable ? request.isVisiable() : this.visiable,
-                this.wentDate
-        );
+    public void updateWith(MarkerUpdateRequest request, String imageUrl) {
+        if (request.getTitle() != null) {
+            this.title = request.getTitle();
+        }
+        if (request.getMemo() != null) {
+            this.memo = request.getMemo();
+        }
+        if (imageUrl != null) {
+            this.imageUrl = imageUrl;
+        }
+        this.visiable = request.isVisiable();
     }
 }
