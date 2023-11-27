@@ -6,6 +6,7 @@ import com.backend.remindmap.marker.application.MarkerService;
 import com.backend.remindmap.marker.dto.request.MarkerCreateRequest;
 import com.backend.remindmap.marker.dto.request.MarkerLocationRequest;
 import com.backend.remindmap.marker.dto.request.MarkerRankRequest;
+import com.backend.remindmap.marker.dto.request.MarkerUpdateRequest;
 import com.backend.remindmap.marker.dto.response.MarkerResponse;
 import com.backend.remindmap.member.domain.Member.Member;
 import lombok.RequiredArgsConstructor;
@@ -45,17 +46,11 @@ public class MarkerController {
         return ResponseEntity.ok().body(response);
     }
 
-    @DeleteMapping("/marker/{markerId}")
-    public ResponseEntity<Void> delete(@PathVariable final Long markerId) {
-        markerService.delete(markerId);
-        return ResponseEntity.noContent().build();
-    }
-
     @PostMapping(path = "/marker/group/{groupId}", consumes= {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<MarkerResponse> saveByGroup(
             @PathVariable final Long groupId,
             @RequestPart(value = "request") MarkerCreateRequest request,
-            @RequestPart(value = "file") MultipartFile multipartFile,
+            @RequestPart(value = "file", required = false) MultipartFile multipartFile,
             HttpServletRequest servletRequest
     ) throws ParseException, IOException {
         Member member = (Member) servletRequest.getAttribute("member");
@@ -69,6 +64,31 @@ public class MarkerController {
             @PathVariable final Long groupId
     ) {
         return markerService.findMarkersByGroup(groupId);
+    }
+
+    @PostMapping("/marker/update/group/{groupId}")
+    public MarkerResponse updateMarker(
+            @PathVariable final Long groupId,
+            @RequestPart(value = "request") MarkerUpdateRequest request,
+            @RequestPart(value = "file", required = false) MultipartFile multipartFile,
+            HttpServletRequest servletRequest
+    ) throws IOException {
+        Member member = (Member) servletRequest.getAttribute("member");
+        markerService.validateMarkerOwner(member.getMemberId(), request.getMarkerId());
+        String imageUrl = uploadService.uploadFile("marker", multipartFile);
+        return markerService.updateMarker(groupId, request, imageUrl);
+    }
+
+    @DeleteMapping("/marker/group/{groupId}/marker/{markerId}")
+    public ResponseEntity<Void> delete(
+            @PathVariable(value = "groupId") final Long groupId,
+            @PathVariable(value = "markerId") final Long markerId,
+            HttpServletRequest servletRequest
+    ) {
+        Member member = (Member) servletRequest.getAttribute("member");
+        markerService.validateMarkerOwner(member.getMemberId(), markerId);
+        markerService.delete(groupId, markerId);
+        return ResponseEntity.noContent().build();
     }
 
 }

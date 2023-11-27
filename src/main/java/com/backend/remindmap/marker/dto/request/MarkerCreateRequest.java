@@ -12,12 +12,15 @@ import org.locationtech.jts.geom.Point;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @Getter
 public class MarkerCreateRequest {
+
+    private Long markerId;
 
     @NotBlank(message = "공백일 수는 없습니다.")
     private String title;
@@ -32,7 +35,7 @@ public class MarkerCreateRequest {
     private boolean visiable;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime wentDate;
+    private LocalDate wentDate;
 
     public Marker toEntityByGroup(Member member, Group group, Point point, String imageUrl) {
         return Marker.builder()

@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -22,10 +23,10 @@ public class MarkerResponse {
     private String imageUrl;
     private boolean visiable;
     private Location location;
-    private LocalDateTime wentDate;
+    private LocalDate wentDate;
 
     @Builder
-    public MarkerResponse(Long id, String nickName, String title, String memo, String imageUrl, boolean visiable, Location location, LocalDateTime wentDate) {
+    public MarkerResponse(Long id, String nickName, String title, String memo, String imageUrl, boolean visiable, Location location, LocalDate wentDate) {
         this.id = id;
         this.nickName = nickName;
         this.title = title;

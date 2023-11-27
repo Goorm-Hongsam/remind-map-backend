@@ -1,6 +1,7 @@
 package com.backend.remindmap.marker.domain;
 
 import com.backend.remindmap.group.domain.group.Group;
+import com.backend.remindmap.marker.dto.request.MarkerUpdateRequest;
 import com.backend.remindmap.marker.dto.response.MarkerResponse;
 import com.backend.remindmap.member.domain.Member.Member;
 import lombok.*;
@@ -8,6 +9,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.locationtech.jts.geom.Point;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -49,10 +51,10 @@ public class Marker {
     private int view;
 
     @Column(name = "went_date", nullable = false)
-    private LocalDateTime wentDate;
+    private LocalDate wentDate;
 
     @Builder
-    public Marker(Member member, Group group, Long id, String title, String memo, String imageUrl, Location location, Point point, boolean visiable, LocalDateTime wentDate) {
+    public Marker(Member member, Group group, Long id, String title, String memo, String imageUrl, Location location, Point point, boolean visiable, LocalDate wentDate) {
         this.member = member;
         this.group = group;
         this.id = id;
@@ -75,5 +77,22 @@ public class Marker {
                 .location(this.location)
                 .wentDate(this.wentDate)
                 .build();
+    }
+
+    public void updateWith(MarkerUpdateRequest request, String imageUrl) {
+        if (request.getTitle() != null) {
+            this.title = request.getTitle();
+        }
+        if (request.getMemo() != null) {
+            this.memo = request.getMemo();
+        }
+        if (imageUrl != null) {
+            this.imageUrl = imageUrl;
+        }
+        if (wentDate != null) {
+            this.wentDate = request.getWentDate();
+        }
+
+        this.visiable = request.isVisiable();
     }
 }
