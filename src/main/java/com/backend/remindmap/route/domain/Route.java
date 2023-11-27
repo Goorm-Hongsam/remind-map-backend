@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -44,10 +45,10 @@ public class Route {
     private int view;
 
     @Column(name = "went_date", nullable = false)
-    private LocalDateTime wentDate;
+    private LocalDate wentDate;
 
     @Builder
-    public Route(Member member, Group group, String title, String memo, String imageUrl, boolean visiable, int view, LocalDateTime wentDate) {
+    public Route(Member member, Group group, String title, String memo, String imageUrl, boolean visiable, int view, LocalDate wentDate) {
         this.member = member;
         this.group = group;
         this.title = title;

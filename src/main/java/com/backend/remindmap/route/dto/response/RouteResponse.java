@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,14 +19,14 @@ public class RouteResponse {
     private Long id;
     private String routeMaker;
     private String title;
-    private LocalDateTime wentDate;
+    private LocalDate wentDate;
     private boolean visiable;
     private String memo;
     private String imageUrl;
     private List<MarkerResponse> markers;
 
     @Builder
-    public RouteResponse(Long id, String routeMaker, String title, String memo, String imageUrl, boolean visiable, LocalDateTime wentDate, List<MarkerResponse> markers) {
+    public RouteResponse(Long id, String routeMaker, String title, String memo, String imageUrl, boolean visiable, LocalDate wentDate, List<MarkerResponse> markers) {
         this.id = id;
         this.routeMaker = routeMaker;
         this.title = title;
