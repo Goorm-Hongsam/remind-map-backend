@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -19,10 +20,10 @@ public class RankResponse {
     private String title;
     private String memo;
     private String nickName;
-    private LocalDateTime wentDate;
+    private LocalDate wentDate;
 
     @Builder
-    private RankResponse(Long id, String title, String memo, String nickName, LocalDateTime wentDate) {
+    private RankResponse(Long id, String title, String memo, String nickName, LocalDate wentDate) {
         this.id = id;
         this.title = title;
         this.memo = memo;
