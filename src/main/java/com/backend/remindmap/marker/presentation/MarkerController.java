@@ -81,8 +81,8 @@ public class MarkerController {
 
     @DeleteMapping("/marker/group/{groupId}/marker/{markerId}")
     public ResponseEntity<Void> delete(
-            @PathVariable final Long groupId,
-            @PathVariable final Long markerId,
+            @PathVariable(value = "groupId") final Long groupId,
+            @PathVariable(value = "markerId") final Long markerId,
             HttpServletRequest servletRequest
     ) {
         Member member = (Member) servletRequest.getAttribute("member");
