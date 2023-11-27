@@ -31,7 +31,7 @@ public class MarkerCreateRequest {
 
     private boolean visiable;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime wentDate;
 
     public Marker toEntityByGroup(Member member, Group group, Point point, String imageUrl) {

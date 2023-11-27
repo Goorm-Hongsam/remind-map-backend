@@ -34,7 +34,7 @@ public class MarkerService {
     private final GroupRepository groupRepository;
     private final EntityManager em;
 
-    private static final Double SEARCH_MAX_DISTANCE = 10.0;
+    private static final Double SEARCH_MAX_DISTANCE = 30.0;
 
     public List<MarkerResponse> findMarkersByLocation(Long memberId, MarkerLocationRequest request) {
         Location northEast = GeometryUtil.calculate(request.getLatitude(), request.getLongitude(), SEARCH_MAX_DISTANCE, Direction.NORTHEAST.getBearing());

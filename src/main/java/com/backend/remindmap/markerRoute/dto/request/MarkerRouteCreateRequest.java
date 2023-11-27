@@ -1,6 +1,7 @@
 package com.backend.remindmap.markerRoute.dto.request;
 
 import com.backend.remindmap.group.domain.group.Group;
+import com.backend.remindmap.marker.application.LocalDateTimeFormat;
 import com.backend.remindmap.marker.domain.Marker;
 import com.backend.remindmap.markerRoute.domain.MarkerRoute;
 import com.backend.remindmap.member.domain.Member.Member;
@@ -30,6 +31,7 @@ public class MarkerRouteCreateRequest {
 
     private boolean visiable;
 
+    @LocalDateTimeFormat
     private LocalDateTime wentDate;
 
     @Builder
