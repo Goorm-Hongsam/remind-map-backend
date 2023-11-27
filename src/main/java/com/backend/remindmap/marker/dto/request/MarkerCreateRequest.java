@@ -20,6 +20,8 @@ import java.time.LocalDateTime;
 @Getter
 public class MarkerCreateRequest {
 
+    private Long markerId;
+
     @NotBlank(message = "공백일 수는 없습니다.")
     private String title;
 

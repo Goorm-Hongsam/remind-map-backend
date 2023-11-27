@@ -27,7 +27,9 @@ public class S3UploadService {
     private String bucket;
 
     public String uploadFile(String category, MultipartFile multipartFile) throws IOException {
-        validateFileExists(multipartFile);
+        if (multipartFile.isEmpty()) {
+            return "";
+        }
 
         String originalFilename = multipartFile.getOriginalFilename();
         String fileName = S3Util.buildFileName(category, originalFilename);
@@ -47,9 +49,4 @@ public class S3UploadService {
         return amazonS3.getUrl(bucket, fileName).toString();
     }
 
-    private void validateFileExists(MultipartFile multipartFile) {
-        if (multipartFile.isEmpty()) {
-            throw new FileEmptyException();
-        }
-    }
 }
