@@ -9,7 +9,9 @@ import com.backend.remindmap.marker.domain.Marker;
 import com.backend.remindmap.marker.domain.MarkerRepository;
 import com.backend.remindmap.marker.dto.request.MarkerCreateRequest;
 import com.backend.remindmap.marker.dto.request.MarkerLocationRequest;
+import com.backend.remindmap.marker.dto.request.MarkerUpdateRequest;
 import com.backend.remindmap.marker.dto.response.MarkerResponse;
+import com.backend.remindmap.marker.exception.NotOwnerMarkerException;
 import com.backend.remindmap.member.domain.Member.Member;
 import com.backend.remindmap.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
@@ -111,8 +114,12 @@ public class MarkerService {
     }
 
     @Transactional
-    public void delete(Long id) {
+    public void delete(Long groupId, Long id) {
+        Group group = groupRepository.findGroupById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 그룹입니다."));
+
         Marker marker = markerRepository.getById(id);
+
         markerRepository.delete(marker);
     }
 
@@ -142,4 +149,24 @@ public class MarkerService {
                 .map(MarkerResponse::fromEntity)
                 .collect(Collectors.toList());
     }
+
+    public MarkerResponse updateMarker(Long groupId, MarkerUpdateRequest request, String imgUrl) {
+        groupRepository.findGroupById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 그룹입니다."));
+
+        Marker marker = markerRepository.getById(request.getMarkerId());
+
+        marker.updateWith(request, imgUrl);
+
+        Marker savedMarker = markerRepository.save(marker);
+        return MarkerResponse.fromEntity(savedMarker);
+    }
+
+    public void validateMarkerOwner(Long memberId, Long markerId) {
+        Marker marker = markerRepository.getById(markerId);
+        if (memberId != marker.getId()) {
+            throw new NotOwnerMarkerException();
+        }
+    }
+
 }

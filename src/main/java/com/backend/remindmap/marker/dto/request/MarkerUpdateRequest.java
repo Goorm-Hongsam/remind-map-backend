@@ -1,7 +1,6 @@
-package com.backend.remindmap.markerRoute.dto.request;
+package com.backend.remindmap.marker.dto.request;
 
 import com.backend.remindmap.group.domain.group.Group;
-import com.backend.remindmap.marker.application.LocalDateTimeFormat;
 import com.backend.remindmap.marker.domain.Marker;
 import com.backend.remindmap.markerRoute.domain.MarkerRoute;
 import com.backend.remindmap.member.domain.Member.Member;
@@ -14,15 +13,13 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MarkerRouteCreateRequest {
+public class MarkerUpdateRequest {
 
-    @NotNull(message = "markerId 목록이 null일 수 없습니다.")
-    private List<Long> markerIds;
+    private Long markerId;
 
     @NotBlank(message = "제목이 공백일 수 없습니다.")
     private String title;
@@ -35,8 +32,8 @@ public class MarkerRouteCreateRequest {
     private LocalDate wentDate;
 
     @Builder
-    public MarkerRouteCreateRequest(List<Long> markerIds, String title, String memo, boolean visiable, LocalDate wentDate) {
-        this.markerIds = markerIds;
+    public MarkerUpdateRequest(Long markerId, String title, String memo, boolean visiable, LocalDate wentDate) {
+        this.markerId = markerId;
         this.title = title;
         this.memo = memo;
         this.visiable = visiable;

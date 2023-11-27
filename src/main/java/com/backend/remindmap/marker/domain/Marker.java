@@ -1,6 +1,7 @@
 package com.backend.remindmap.marker.domain;
 
 import com.backend.remindmap.group.domain.group.Group;
+import com.backend.remindmap.marker.dto.request.MarkerUpdateRequest;
 import com.backend.remindmap.marker.dto.response.MarkerResponse;
 import com.backend.remindmap.member.domain.Member.Member;
 import lombok.*;
@@ -76,5 +77,20 @@ public class Marker {
                 .location(this.location)
                 .wentDate(this.wentDate)
                 .build();
+    }
+
+    public Marker updateWith(MarkerUpdateRequest request, String imageUrl) {
+        return new Marker(
+                this.member,
+                this.group,
+                this.id,
+                request.getTitle() != null ? request.getTitle() : this.title,
+                request.getMemo() != null ? request.getMemo() : this.memo,
+                imageUrl != null ? imageUrl : this.imageUrl,
+                this.location,
+                this.point,
+                request.isVisiable() != this.visiable ? request.isVisiable() : this.visiable,
+                this.wentDate
+        );
     }
 }
