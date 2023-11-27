@@ -89,6 +89,10 @@ public class Marker {
         if (imageUrl != null) {
             this.imageUrl = imageUrl;
         }
+        if (wentDate != null) {
+            this.wentDate = request.getWentDate();
+        }
+
         this.visiable = request.isVisiable();
     }
 }
