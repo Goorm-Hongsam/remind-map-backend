@@ -8,6 +8,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.locationtech.jts.geom.Point;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -49,10 +50,10 @@ public class Marker {
     private int view;
 
     @Column(name = "went_date", nullable = false)
-    private LocalDateTime wentDate;
+    private LocalDate wentDate;
 
     @Builder
-    public Marker(Member member, Group group, Long id, String title, String memo, String imageUrl, Location location, Point point, boolean visiable, LocalDateTime wentDate) {
+    public Marker(Member member, Group group, Long id, String title, String memo, String imageUrl, Location location, Point point, boolean visiable, LocalDate wentDate) {
         this.member = member;
         this.group = group;
         this.id = id;
