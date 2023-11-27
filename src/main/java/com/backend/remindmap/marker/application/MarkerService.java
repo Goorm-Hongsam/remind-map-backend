@@ -164,7 +164,7 @@ public class MarkerService {
 
     public void validateMarkerOwner(Long memberId, Long markerId) {
         Marker marker = markerRepository.getById(markerId);
-        if (memberId != marker.getId()) {
+        if (!(marker.getMember().getMemberId().equals(memberId))) {
             throw new NotOwnerMarkerException();
         }
     }
