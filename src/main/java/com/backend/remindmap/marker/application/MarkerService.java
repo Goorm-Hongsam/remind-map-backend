@@ -15,6 +15,7 @@ import com.backend.remindmap.marker.exception.NotOwnerMarkerException;
 import com.backend.remindmap.member.domain.Member.Member;
 import com.backend.remindmap.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKTReader;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class MarkerService {
 
     private final MarkerRepository markerRepository;
@@ -150,21 +152,27 @@ public class MarkerService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public MarkerResponse updateMarker(Long groupId, MarkerUpdateRequest request, String imgUrl) {
         groupRepository.findGroupById(groupId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 그룹입니다."));
 
         Marker marker = markerRepository.getById(request.getMarkerId());
-
         marker.updateWith(request, imgUrl);
 
+        log.info(request.getTitle());
+        log.info(request.getMemo());
+
         Marker savedMarker = markerRepository.save(marker);
+        log.info(savedMarker.getTitle());
         return MarkerResponse.fromEntity(savedMarker);
     }
 
     public void validateMarkerOwner(Long memberId, Long markerId) {
         Marker marker = markerRepository.getById(markerId);
-        if (!(marker.getMember().getMemberId().equals(memberId))) {
+        log.info("create member Id: " + marker.getMember().getMemberId());
+        log.info("create member Id: " + memberId);
+        if (!marker.getMember().getMemberId().equals(memberId)) {
             throw new NotOwnerMarkerException();
         }
     }
