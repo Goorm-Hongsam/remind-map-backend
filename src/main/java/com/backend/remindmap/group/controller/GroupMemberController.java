@@ -1,14 +1,16 @@
-package com.remind.map.group.controller;
+package com.backend.remindmap.group.controller;
 
-import com.remind.map.group.domain.GroupMember;
-import com.remind.map.group.domain.GroupMemberDto;
-import com.remind.map.group.service.GroupMemberService;
+import com.backend.remindmap.group.domain.groupMember.GroupMember;
+import com.backend.remindmap.group.domain.groupMember.GroupMemberDto;
+import com.backend.remindmap.group.service.GroupMemberService;
+import com.backend.remindmap.member.domain.Member.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -16,18 +18,31 @@ public class GroupMemberController {
 
     private final GroupMemberService groupMemberService;
 
-    @PostMapping("/group/member/add")
-    public GroupMember addMember(@RequestBody GroupMemberDto groupMemberDto) {
+    /**
+     * 엔드포인트 수정 !
+     */
+    @GetMapping("/group/member/add/{groupId}")
+    public GroupMember addMember(@PathVariable Long groupId ,HttpServletRequest request) {
+        Member member = (Member) request.getAttribute("member");
+        GroupMemberDto groupMemberDto = new GroupMemberDto(groupId, member.getMemberId());
         GroupMember groupMember = groupMemberService.addMember(groupMemberDto);
         return groupMember;
     }
 
-    @PostMapping("/group/member/remove/{gmId}")
-    public void removeMember(@PathVariable Long gmId) {
-        groupMemberService.removeMember(gmId);
-    }
 
-    // n번 그룹에 대한 그룹원 전체조회 만들기
+    @DeleteMapping("/group/member/remove/{groupId}")
+    public void removeMember(@PathVariable Long groupId, HttpServletRequest request) {
+        Member member = (Member) request.getAttribute("member");
+        GroupMemberDto groupMemberDto = new GroupMemberDto(groupId, member.getMemberId());
+        groupMemberService.removeMember(groupMemberDto);
+    } // 내가 이 그룹 탈퇴 !
+
+
+
+    @GetMapping("group/member/get/{groupId}")
+    public List<Member> getMember(@PathVariable Long groupId) {
+        return groupMemberService.findAllMember(groupId);
+    }
 
 
 }

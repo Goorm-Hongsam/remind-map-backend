@@ -32,8 +32,28 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
+	implementation group: 'org.hibernate', name: 'hibernate-spatial', version: '5.6.9.Final'
+	implementation 'com.google.code.gson:gson:2.10.1'
+
+	/* validation */
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	implementation group: 'com.auth0', name: 'java-jwt', version: '3.10.2'
+//	implementation group: 'com.auth0', name: 'java-jwt', version: '3.10.2'
+
+	implementation group:'io.jsonwebtoken', name:'jjwt-api', version:'0.11.2'
+    implementation group:'io.jsonwebtoken', name:'jjwt-impl', version:'0.11.2'
+    implementation group:'io.jsonwebtoken', name:'jjwt-jackson', version:'0.11.2'
+
+	/* kafka */
+	implementation 'org.springframework.kafka:spring-kafka'
+
+	/* redis */
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	/* s3 */
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
 }
 
 tasks.named('bootBuildImage') {
@@ -44,9 +64,14 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
+jar {
+	enabled = false
+}
+
 processResources.dependsOn('copySecret')
 tasks.register('copySecret', Copy) {
 	from './src/main/resources/security'
 	include "application*.yml"
 	into 'src/main/resources'
 }
+

@@ -1,36 +1,32 @@
 package com.backend.remindmap.member.service;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
+import com.backend.remindmap.member.domain.KakaoMember.KakaoUerInfoDto;
+import com.backend.remindmap.member.domain.KakaoToken.KakaoMemberToken;
+import com.backend.remindmap.member.domain.KakaoToken.KakaoTokenDto;
+import com.backend.remindmap.member.domain.Member.Member;
+import com.backend.remindmap.member.domain.Member.MemberRefreshToken;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.backend.remindmap.member.domain.KakaoUerInfoDto;
-import com.backend.remindmap.member.domain.KakaoTokenDto;
-import com.backend.remindmap.member.domain.Member;
 import com.backend.remindmap.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Date;
-import java.util.Optional;
-
+import java.util.*;
 
 
 @RequiredArgsConstructor
 @Service
 @Slf4j
+@Transactional
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -41,6 +37,9 @@ public class MemberService {
     @Value("${kakao.client_id}")
     private String client_id;
 
+    /**
+     * 카카오에서 토큰 받기
+     */
     @Transactional
     public KakaoTokenDto getKakaoAccessToken(String code) {
 
@@ -50,7 +49,7 @@ public class MemberService {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", client_id);
-        params.add("redirect_uri", "http://localhost:3000/kakao/callback");
+        params.add("redirect_uri", "https://remindmap.site/kakao/callback");
         params.add("code", code);
 //        params.add("client_secret", KAKAO_CLIENT_SECRET); 선택 사항
 
@@ -110,6 +109,10 @@ public class MemberService {
                 ,kakaoUerInfoDto.getKakao_account().getProfile().getNickname()
                 ,kakaoUerInfoDto.getKakao_account().getProfile().getThumbnail_image_url());
 
+        log.info("카카오에서 가져온 id={}",kakaoUerInfoDto.getId());
+        log.info("카카오에서 가져온 nickname={}",kakaoUerInfoDto.getKakao_account().getProfile().getNickname());
+        log.info("카카오에서 가져온 img={}",kakaoUerInfoDto.getKakao_account().getProfile().getThumbnail_image_url());
+
 
         Optional<Member> existOwner = memberRepository.findMemberById(member.getMemberId());
 
@@ -117,23 +120,127 @@ public class MemberService {
             // 회원가입
             memberRepository.save(member);
         }
-
         return member;
 
     }
 
-    public String getJwtToken(Member member) {
+    // 더티채킹
+    @Transactional
+    public void saveRefreshToken(Member member, String refreshToken) {
 
-        log.info("생성 시크릿 키={}",jwtSecretKey);
+        MemberRefreshToken memberRefreshToken = new MemberRefreshToken();
+        memberRefreshToken.setMemberId(member.getMemberId());
+        memberRefreshToken.setRefreshToken(refreshToken);
 
-        String jwtToken = JWT.create()
-                .withExpiresAt(new Date(System.currentTimeMillis() + 120000))
-                .withClaim("id", member.getMemberId())
-                .withClaim("nickname", member.getNickname())
-                .withClaim("thumbnailImageUrl", member.getThumbnailImageUrl())
-                .sign(Algorithm.HMAC512(jwtSecretKey));
+        MemberRefreshToken dbRefreshToken = getDbRefreshToken(member.getMemberId());
 
-        return jwtToken;
+        if (dbRefreshToken != null) {
+            dbRefreshToken.setRefreshToken(refreshToken);
+        } else {
+            memberRepository.saveRefreshToken(memberRefreshToken);
+        }
+
     }
+
+    public MemberRefreshToken getDbRefreshToken(Long memberId) {
+
+        Optional<MemberRefreshToken> memberRefreshToken = memberRepository.findRefreshTokenByMemberId(memberId);
+
+        if (memberRefreshToken.isPresent()) {
+            return memberRefreshToken.get();
+        } else {
+            return null;
+        }
+
+    }
+
+    public void saveKakaoToken(Member member, KakaoTokenDto kakaoTokenDto) {
+
+        KakaoMemberToken kakaoMemberToken = new KakaoMemberToken();
+        kakaoMemberToken.setMemberId(member.getMemberId());
+        kakaoMemberToken.setKakaoAccessToken(kakaoTokenDto.getAccess_token());
+        kakaoMemberToken.setKakaoRefreshToken(kakaoTokenDto.getRefresh_token());
+
+        KakaoMemberToken dbKakaoMemberToken = getDbKakaoMemberToken(member.getMemberId());
+
+        if (dbKakaoMemberToken != null) {
+            dbKakaoMemberToken.setKakaoAccessToken(kakaoTokenDto.getAccess_token());
+            dbKakaoMemberToken.setKakaoRefreshToken(kakaoTokenDto.getRefresh_token());
+        } else {
+            memberRepository.saveKakaoToken(kakaoMemberToken);
+
+        }
+    }
+
+    public KakaoMemberToken getDbKakaoMemberToken(Long memberId) {
+        Optional<KakaoMemberToken> kakaoMemberToken = memberRepository.findKakaoMemberTokenByMemberId(memberId);
+
+        if (kakaoMemberToken.isPresent()) {
+            return kakaoMemberToken.get();
+        } else {
+            return null;
+        }
+    }
+
+    public void expireKakaoToken(Long memberId) {
+        KakaoMemberToken kakaoMemberToken = getDbKakaoMemberToken(memberId);
+
+        RestTemplate rt = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + kakaoMemberToken.getKakaoAccessToken());
+
+        HttpEntity<MultiValueMap<String, String>> accountInfoRequest = new HttpEntity<>(headers);
+
+        // POST 방식으로 API 서버에 요청 후 response 받아옴
+        ResponseEntity<String> accountInfoResponse = rt.exchange(
+                "https://kapi.kakao.com/v1/user/logout",
+                HttpMethod.POST,
+                accountInfoRequest,
+                String.class
+        );
+
+    }
+
+    public void deleteDbRefreshToken(Long memberId) {
+        memberRepository.deleteDbRefreshToken(memberId);
+    }
+
+    public void deleteDbKakaoToken(Long memberId) {
+        memberRepository.deleteDbKakaoToken(memberId);
+    }
+
+
+    // 로그아웃
+    public void logout(String kakaoAccessToken) {
+
+        RestTemplate rt = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + kakaoAccessToken);
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+
+        HttpEntity<MultiValueMap<String, String>> accountInfoRequest = new HttpEntity<>(headers);
+
+        // POST 방식으로 API 서버에 요청 후 response 받아옴
+        ResponseEntity<String> accountInfoResponse = rt.exchange(
+                "https://kapi.kakao.com/v2/user/me",
+                HttpMethod.POST,
+                accountInfoRequest,
+                String.class
+        );
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        KakaoUerInfoDto kakaoUerInfoDto = null;
+        try {
+            kakaoUerInfoDto = objectMapper.readValue(accountInfoResponse.getBody(), KakaoUerInfoDto.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 }
 
